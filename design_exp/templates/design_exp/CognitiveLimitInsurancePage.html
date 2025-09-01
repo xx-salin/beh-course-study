@@ -1,0 +1,138 @@
+{% extends "global/Page.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+  .step { display: none; }
+  .step.active { display: block; }
+  table { border-collapse: collapse; width: 80%; margin-bottom: 20px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  th { background-color: #f0f0f0; }
+</style>
+
+
+<h3>Please review the details of the two insurance plans below and select the one you prefer.</h3>
+{% if experimentGroup == "A" %}
+    <!-- Version A: Show all pages at once -->
+    <h3>Details 1 (of 3)</h3>
+    <table>cd 
+      <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
+      <tbody>
+        <tr><td>Hospital Stay Coverage</td><td>99% covered</td><td>99% covered</td></tr>
+        <tr><td>Prescription Drugs Coverage</td><td>90% covered</td><td>90% covered</td></tr>
+        <tr><td>Monthly Premium</td><td>€121</td><td>€158</td></tr>
+        <tr><td>Mobile App</td><td>Yes</td><td>Yes</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Details 2 (of 3)</h3>
+    <table>
+      <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
+      <tbody>
+        <tr><td>Annual Deductible</td><td>€1394</td><td>€990</td></tr>
+        <tr><td>Dental Care Coverage (max. per year)</td><td>€694</td><td>€716</td></tr>
+        <tr><td>Online Account Access</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td>Maternity Coverage</td><td>No Coverage</td><td>Included</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Details 3 (of 3)</h3>
+    <table>
+      <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
+      <tbody>
+        <tr><td>Vision Care Coverage (max. per year)</td><td>€191</td><td>€209</td></tr>
+        <tr><td>Wellness Programs</td><td>No coverage</td><td>No coverage</td></tr>
+        <tr><td>Doctor Visits Covered</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>Travel Coverage</td><td>Worldwide</td><td>Worldwide</td></tr>
+      </tbody>
+    </table>
+
+    {{ formfields }}
+    {{ next_button }}
+
+  {% else %}
+    <!-- Version B: Stepwise display -->
+    <!-- Step 1 -->
+    <div class="step active" id="step-1">
+      <h3>Details 1 (of 3)</h3>
+      <table>
+        <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
+        <tbody>
+          <tr><td>Hospital Stay Coverage</td><td>99% covered</td><td>99% covered</td></tr>
+          <tr><td>Prescription Drugs Coverage</td><td>90% covered</td><td>90% covered</td></tr>
+          <tr><td>Monthly Premium</td><td>€121</td><td>€158</td></tr>
+          <tr><td>Mobile App</td><td>Yes</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" id="step-2">
+      <h3>Details 2 (of 3)</h3>
+      <table>
+        <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
+        <tbody>
+          <tr><td>Annual Deductible</td><td>€1394</td><td>€990</td></tr>
+          <tr><td>Dental Care Coverage (max. per year)</td><td>€694</td><td>€716</td></tr>
+          <tr><td>Online Account Access</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>Maternity Coverage</td><td>No Coverage</td><td>Included</td></tr>
+        </tbody>
+      </table>
+      <button type="button" onclick="prevStep()">Previous</button>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" id="step-3">
+      <h3>Details 3 (of 3)</h3>
+      <table>
+        <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
+        <tbody>
+          <tr><td>Vision Care Coverage (max. per year)</td><td>€191</td><td>€209</td></tr>
+          <tr><td>Wellness Programs</td><td>No coverage</td><td>No coverage</td></tr>
+          <tr><td>Doctor Visits Covered</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><td>Travel Coverage</td><td>Worldwide</td><td>Worldwide</td></tr>
+        </tbody>
+      </table>
+      <button type="button" onclick="prevStep()">Previous</button>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
+
+    <!-- Step 4: Final Question -->
+    <div class="step" id="step-4">
+      {{ formfields }}
+      {{ next_button }}
+    </div>
+
+  {% endif %}
+
+{% if experimentGroup != "A" %}
+<script>
+  let currentStep = 1;
+  const totalSteps = 4;
+
+  function showStep(step) {
+    for (let i = 1; i <= totalSteps; i++) {
+      document.getElementById('step-' + i).classList.remove('active');
+    }
+    document.getElementById('step-' + step).classList.add('active');
+  }
+
+  function nextStep() {
+    if (currentStep < totalSteps) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  }
+</script>
+{% endif %}
+<p>Page {{ page_num }} of {{ total_pages }}</p>
+{% endblock %}

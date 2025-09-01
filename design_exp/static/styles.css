@@ -1,0 +1,73 @@
+body {
+    font-family: "Arial" sans-serif;
+    font-size: 16px;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+.survey-container {
+    background-color: #fff;
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.checkboxgroup {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 100px;
+}
+
+.checkboxgroup label {
+    padding: 0;
+    display: inline-block;
+}
+
+.checkboxgroup input {
+    cursor: pointer;
+}
+
+.progress {
+    margin-top: 1em;
+}
+
+.progress-bar {
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+
+.checkboxgroup input[type="radio"],
+.checkboxgroup label {
+    cursor: pointer;
+}
+
+.instructions + .form-label {
+    padding-top: 50px;
+}
+
+
+.centered-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.left-container {
+  flex: 1 1 50%;
+}
+.right-container {
+  flex: 1 1 50%;
+}
+
+@media (max-width: 768px) {
+  .left-container,
+  .right-container {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}

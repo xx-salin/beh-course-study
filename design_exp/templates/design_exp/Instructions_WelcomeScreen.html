@@ -1,0 +1,48 @@
+{{ extends "global/Base.html" }}
+{{ load otree_tags }}
+{{ block content }}
+<head>
+    <link rel="stylesheet" href="{{ static 'styles.css' }}">
+</head>
+<div class="survey-container">
+    <h1> Welcome! </h1>
+
+	<p>Thanks for participating in this survey.
+        This study consists of a sequence of tasks that explore different topics in experimental economics and finance. It concludes with a survey.</p>
+    <p>To make things interesting, please do not use your computer or other means to research the questions in the survey - 
+        simply respond to them as you would in a pen and paper situation.
+	</p>
+    <p>It will take approximately 30 minutes.
+       Please enter your identifying information. We will only use the this information to check that you completed the study. 
+       We will not connect your responses in the study to you personally, i.e., the study results will be based on anonymized data.</p>
+
+    {{ formfield form.last_name }}
+    {{ formfield form.first_name }}
+    {{ formfield form.student_number }}
+            <p>
+  All data will be kept confidential by the researchers.
+    Personal information will not be stored with the data.
+    Participants are free to withdraw any time. By clicking “I agree” below you are indicating that
+    you are at least 18 years old, have read and understood this page and the linked forms
+    (<a href="/static/Consent_General.pdf" target="_blank">consent form</a>, as well as
+    <a href="/static/InformationSheetAndPrivacyNotice_General.pdf" target="_blank">information sheet and privacy notice</a>),
+    and agree to participate in this research study.
+    </p>
+    <button id="next_button" class="otree-btn-next btn btn-primary">I agree</button>
+<br><br>
+<button id="leave_button" class="btn btn-danger" onclick="document.getElementById('isLeaving').value='true'; document.forms[0].submit();">Leave</button>
+<br><br>
+
+        <input type="hidden" name="browser_first" value="" id="browser_first"/>
+    <input type="hidden" name="op_sys_first" value="" id="op_sys_first"/>
+<input type="hidden" name="isLeaving" value="false" id="isLeaving"/>
+
+</div>
+    <script src="{{ static 'js/device_detection.js' }}"></script>
+
+<p>Page {{ page_num }} of {{ total_pages }}</p>
+{{ endblock }}
+{% block scripts %}
+    <script>
+function skipPage() {}
+{{ endblock }}

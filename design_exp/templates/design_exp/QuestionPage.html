@@ -1,0 +1,185 @@
+{{ extends "global/Base.html" }}
+{{ load otree_tags }}
+{{ block content }}
+<head>
+    <link rel="stylesheet" href="{{ static 'styles.css' }}">
+</head>
+
+{% if has_image %}
+    <img src="{% static image %}" alt="Page Image" style="max-width:100%; height:auto;">
+{% endif %}
+
+{% if page_name == "SSWMarket" %}
+    {% if group == "A" %}
+        <p>
+            Imagine that you are participating in a market where people can buy and sell an asset.<br>
+            The asset you are trading has the following characteristics:<br>
+            It pays €1.85 at the end of each period, but only with 80% probability.<br>
+            The market lasts for 11 time periods (from t = 0 to t = 10).<br>
+            You are trading with 100 other participants, all of whom are PhD graduates from MIT.
+        </p>
+    {% else %}
+        <p>
+            Imagine that you are participating in a market where people can buy and sell an asset.<br>
+            The asset you are trading has the following characteristics:<br>
+            It pays €1.85 at the end of each period, but only with 80% probability.<br>
+            The market lasts for 11 time periods (from t = 0 to t = 10).<br>
+            You are trading with 100 other participants, all of whom are Robinhood retail investors.
+        </p>
+    {% endif %}
+    
+    {% if group == "A" %}
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 0</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_0_A }}
+            {{ formfield form.ssw_wta_0_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 1</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_1_A }}
+            {{ formfield form.ssw_wta_1_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 2</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_2_A }}
+            {{ formfield form.ssw_wta_2_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 3</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_3_A }}
+            {{ formfield form.ssw_wta_3_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 4</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_4_A }}
+            {{ formfield form.ssw_wta_4_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 5</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_5_A }}
+            {{ formfield form.ssw_wta_5_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 6</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_6_A }}
+            {{ formfield form.ssw_wta_6_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 7</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_7_A }}
+            {{ formfield form.ssw_wta_7_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 8</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_8_A }}
+            {{ formfield form.ssw_wta_8_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 9</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_9_A }}
+            {{ formfield form.ssw_wta_9_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 10</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_10_A }}
+            {{ formfield form.ssw_wta_10_A }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 11</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_11_A }}
+            {{ formfield form.ssw_wta_11_A }}
+        </div>
+
+    {% else %}
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 0</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_0_B }}
+            {{ formfield form.ssw_wta_0_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 1</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_1_B }}
+            {{ formfield form.ssw_wta_1_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 2</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_2_B }}
+            {{ formfield form.ssw_wta_2_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 3</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_3_B }}
+            {{ formfield form.ssw_wta_3_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 4</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_4_B }}
+            {{ formfield form.ssw_wta_4_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 5</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_5_B }}
+            {{ formfield form.ssw_wta_5_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 6</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_6_B }}
+            {{ formfield form.ssw_wta_6_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 7</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_7_B }}
+            {{ formfield form.ssw_wta_7_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 8</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_8_B }}
+            {{ formfield form.ssw_wta_8_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 9</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_9_B }}
+            {{ formfield form.ssw_wta_9_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 10</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_10_B }}
+            {{ formfield form.ssw_wta_10_B }}
+        </div>
+
+        <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 11</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {{ formfield form.ssw_wtp_11_B }}
+            {{ formfield form.ssw_wta_11_B }}
+        </div>
+    {% endif %}
+
+{% else %}
+    {{ formfields }}
+
+{% endif %}
+{{ next_button }}
+
+<p>Page {{ page_num }} of {{ total_pages }}</p>
+{{ endblock }}

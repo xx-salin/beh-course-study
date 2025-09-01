@@ -1,0 +1,10 @@
+{{ extends "global/Base.html" }}
+{{ load otree_tags }}
+{{ block content }}
+<head>
+    <link rel="stylesheet" href="{{ static 'styles.css' }}">
+</head>
+    {{formfields}}
+    {{next_button}}
+<p>Page {{ page_num }} of {{ total_pages }}</p>
+{{ endblock }}
