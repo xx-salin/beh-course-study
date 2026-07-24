@@ -5,7 +5,7 @@ SESSION_CONFIGS = [
         name='design_exp',
          app_sequence=['design_exp'],
          num_demo_participants=2,
-         testing = False
+         testing = True
     ),
 ]
 
@@ -36,3 +36,4 @@ ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 DEMO_PAGE_INTRO_HTML = """ """
 
 SECRET_KEY = '9804803664040'
+otree

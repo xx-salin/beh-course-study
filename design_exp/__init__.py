@@ -1065,21 +1065,21 @@ class Player(BasePlayer):
         ],
     )
 
-    overconfidence1 = models.PositiveIntegerField(
+    overconfidence1 = models.FloatField(
         blank=True,
         initial=None,
         min=0,
         max=100,
         label="You're in a large group of people playing a new game. You don't know how your ability compares to other people's. You play one game against a randomly selected person and win. What percentage of people do you think you're better than (in %, eg. 10 for 10%)?",
     )
-    overconfidence2 = models.PositiveIntegerField(
+    overconfidence2 = models.FloatField(
         blank=True,
         initial=None,
         min=0,
         max=100,
         label="Imagine you're on a committee deciding between 5 different project options. There are 10 members of the committee. You propose Option A. The next three committee members propose Option B. The six other committee members will propose their choice next. When the meeting is finished, what percentage of the choices do you think will be Option A (in %, eg. 10 for 10%)?",
     )
-    overconfidence3 = models.PositiveIntegerField(
+    overconfidence3 = models.FloatField(
         blank=True,
         initial=None,
         min=0,
