@@ -49,6 +49,9 @@ sum e8_successprob if experiment_id==8
 by treatment, sort: sum e8_successprob if experiment_id==8
 ttest e8_successprob, by(treatment)
 
+
+
+
 * E9 Present bias
 sum e9_immediate if experiment_id==9
 by treatment, sort: sum e9_immediate if experiment_id==9
@@ -86,11 +89,16 @@ sum e16_buy if experiment_id==16
 by treatment, sort: sum e16_buy if experiment_id==16
 ttest e16_buy, by(treatment)
 
+
+
+
+
 * E17 Ultimatum game
 sum e17_offer e17_accept if experiment_id==17
 by treatment, sort: sum e17_offer e17_accept if experiment_id==17
 ttest e17_offer, by(treatment)
 ttest e17_accept, by(treatment)
+ttest e17_offer == e17_accept if experiment_id==17
 
 * E18 Dictator game
 sum e18_dictator if experiment_id==18
@@ -128,6 +136,12 @@ sum e24_quantity if experiment_id==24
 by treatment, sort: sum e24_quantity if experiment_id==24
 ttest e24_quantity, by(treatment)
 
+
+
+
+
+
+
 * E25 SSW market
 sum e25_wtp_0-e25_wtp_11 e25_wta_0-e25_wta_11 if experiment_id==25
 forvalues i=0/11 {
@@ -136,14 +150,74 @@ forvalues i=0/11 {
 
 * E26 Wisdom of the crowd
 sum e26_michael e26_daniel e26_christoph if experiment_id==26
+by treatment, sort: sum e26_michael e26_daniel e26_christoph if experiment_id==26* E26 Wisdom of the crowd
+sum e26_michael e26_daniel e26_christoph if experiment_id==26
 by treatment, sort: sum e26_michael e26_daniel e26_christoph if experiment_id==26
 
-* E27-E30 Counting heuristic
-forvalues n=27/30 {
-    tab e`n'_choice treatment if experiment_id==`n', col
-    tab e`n'_belief treatment if experiment_id==`n', col
+foreach p in michael daniel christoph {
+    display "=== `p' ==="
+    sdtest e26_`p' if experiment_id==26, by(treatment)
 }
-sum FrequencyOfOutperformance FrequencyOfLeadership if experiment_id>=27 & experiment_id<=30
+
+
+
+
+
+
+* ============================================
+* E27-E30 Counting heuristic
+* ============================================
+
+* --- benchmark matched to the display format each subject saw ---
+gen benchmark = .
+replace benchmark = FrequencyOfOutperformance if treatment==0  
+replace benchmark = FrequencyOfLeadership     if treatment==1 
+label variable benchmark "Times Asset B beat Asset A (matched to display)"
+
+* which asset the counting heuristic points to (5 = tie, left missing)
+gen heur_B = .
+replace heur_B = 1 if benchmark > 5 & benchmark < .
+replace heur_B = 0 if benchmark < 5
+label variable heur_B "Heuristic favours Asset B"
+
+* --- per round: does choice / belief follow the heuristic? ---
+forvalues n = 27/30 {
+
+    gen chose_B`n' = .
+    replace chose_B`n' = 1 if e`n'_choice=="Asset B"
+    replace chose_B`n' = 0 if e`n'_choice=="Asset A"
+
+    gen bel_B`n' = .
+    replace bel_B`n' = 1 if e`n'_belief=="Asset B"
+    replace bel_B`n' = 0 if e`n'_belief=="Asset A"
+
+    gen match_choice`n' = (chose_B`n'==heur_B) if chose_B`n'<. & heur_B<.
+    gen match_belief`n' = (bel_B`n'  ==heur_B) if bel_B`n'  <. & heur_B<.
+
+    display _n "===== ROUND `n' ====="
+    ttest match_choice`n' == 0.5 if experiment_id==`n'
+    ttest match_belief`n' == 0.5 if experiment_id==`n'
+
+    * does it hold in both display formats?
+    ttest match_choice`n' if experiment_id==`n', by(treatment)
+}
+
+* --- descriptives ---
+sum benchmark FrequencyOfOutperformance FrequencyOfLeadership if experiment_id>=27 & experiment_id<=30
+tab heur_B treatment if experiment_id>=27 & experiment_id<=30, col
+
+* how often the two benchmarks disagree (the identifying variation)
+gen disagree = (FrequencyOfOutperformance>5) != (FrequencyOfLeadership>5)
+tab disagree if experiment_id>=27 & experiment_id<=30
+
+* --- "Same Expected Return" is dropped above; report its rate separately ---
+forvalues n = 27/30 {
+    tab e`n'_belief if experiment_id==`n'
+}
+
+
+
+
 
 * E31 Deterministic mirror
 tab e31_box1 treatment if experiment_id==31, col

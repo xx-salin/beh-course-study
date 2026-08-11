@@ -552,6 +552,8 @@ class Player(BasePlayer):
             "How many units would you produce?"
         )
     )
+
+
     # SSW Market - questions from periods 1 to 11 are defined dynamically under the Player class.
     ssw_wtp_0_A = models.FloatField(
         min=0,
@@ -610,6 +612,9 @@ class Player(BasePlayer):
         label="How tall do you think <strong>Christoph</strong> is (in centimeters)?"
     )
 
+
+##### Cognitive Limit Box
+
     cognitiveLimitBox_1_A = models.StringField(
         choices=['A', 'B'],
         widget=widgets.RadioSelect,
@@ -638,6 +643,10 @@ class Player(BasePlayer):
                     f"<strong>B</strong>. 87 boxes: 85 boxes €0, 2 boxes €2175"
                 )
     )
+
+
+### Cognitive Limit Insurance
+
 
     cognitiveLimitInsurance = models.StringField(
         choices=['plan A', 'plan B'],

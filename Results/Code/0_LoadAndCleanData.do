@@ -416,7 +416,7 @@ drop playerhindsight_a playerhindsight_b
 
 // same scale
 // playerpresentbias_a ["$20 now", "$50 in 1 month"]
-// playerpresentbias_b ["$20 in 12 months", "$50 in 13 month"]
+// playerpresentbias_b ["$20 in 12 months", "$50 in 13 months"]
 // treatment 0: A <->
 // treatment 1: B <->
 
@@ -426,7 +426,7 @@ gen e9_immediate = .
 replace e9_immediate = 1 if experiment_id==9 & ///
     (playerpresentbias_a=="$20 now" | playerpresentbias_b=="$20 in 12 months")
 replace e9_immediate = 0 if experiment_id==9 & ///
-    (playerpresentbias_a=="$50 in 1 month" | playerpresentbias_b=="$50 in 13 month")
+    (playerpresentbias_a=="$50 in 1 month" | playerpresentbias_b=="$50 in 13 months")
 
 label variable e9_immediate "Chooses earlier smaller reward"
 bro id treatment playerpresentbias_a playerpresentbias_b e9_immediate if experiment_id==9
@@ -485,7 +485,7 @@ by treatment, sort: sum treatment playerdecoy_a playerdecoy_b if experiment_id==
 
 gen e12_target = .
 replace e12_target = 1 if experiment_id==12 & ///
-    (playerdecoy_a=="€15 for 2GB data" | playerdecoy_b=="€15 for 2GB data")
+    (playerdecoy_a=="Option C: €15 for 2GB data" | playerdecoy_b=="Option B: €15 for 2GB data")
 replace e12_target = 0 if experiment_id==12 & e12_target==.
 
 label variable e12_target "Chooses target option"
@@ -528,9 +528,9 @@ by treatment, sort: sum treatment playerstatusquo_a playerstatusquo_b if experim
 
 gen e14_stay = .
 replace e14_stay = 1 if experiment_id==14 & ///
-    (playerstatusquo_a=="Stay with A" | playerstatusquo_b=="Stay with B")
+    (playerstatusquo_a=="Stay" | playerstatusquo_b=="Stay")
 replace e14_stay = 0 if experiment_id==14 & ///
-    (playerstatusquo_a=="Switch to B" | playerstatusquo_b=="Switch to A")
+    (playerstatusquo_a=="Switch" | playerstatusquo_b=="Switch")
 
 label variable e14_stay "Stays with default option"
 bro id treatment playerstatusquo_a playerstatusquo_b e14_stay if experiment_id==14
