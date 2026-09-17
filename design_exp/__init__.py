@@ -19,7 +19,6 @@ class C(BaseConstants):
         "ConjunctionFallacy": ['conjunction_bank_teller', 'conjunction_bank_teller_feminist'],
         "GamblersFallacy": ['gambler_heads', 'gambler_tails'],
         "HotHandFallacy": ['hotHand'],
-        "DispositionEffect": ['disposition'],
         "BaseRateFallacy": ['baseRate'],
         "IllusionofControl": ['illusionControl'],
         "AnchoringEffect": ['anchoring'],
@@ -53,7 +52,6 @@ class C(BaseConstants):
         "E01_ConjunctionFallacy": "ConjunctionFallacy",
         "E02_GamblersFallacy": "GamblersFallacy",
         "E03_HotHandFallacy": "HotHandFallacy",
-        "E04_DispositionEffect": "DispositionEffect",
         "E05_BaseRateFallacy": "BaseRateFallacy",
         "E06_IllusionofControl": "IllusionofControl",
         "E07_AnchoringEffect": "AnchoringEffect",
@@ -81,6 +79,40 @@ class C(BaseConstants):
         "E32_InsurancePlan": "CognitiveLimitInsurance",
     }
     PAGE_TO_TOGGLE = {page: key for key, page in EXPERIMENT_TOGGLES.items()}
+
+    ## Fixed id saved in the "question" field (Stata maps question_id -> experiment_id).
+    ## Ids stay the same when experiments are removed so data stays comparable across sessions.
+    ## Retired ids: 3 = DispositionEffect (E4)
+    QUESTION_IDS = {
+        "ConjunctionFallacy": 0,
+        "GamblersFallacy": 1,
+        "HotHandFallacy": 2,
+        "BaseRateFallacy": 4,
+        "IllusionofControl": 5,
+        "AnchoringEffect": 6,
+        "HindsightBias": 7,
+        "PresentBias": 8,
+        "LossAversion": 9,
+        "EndowmentEffect": 10,
+        "DecoyEffect": 11,
+        "FramingEffect": 12,
+        "StatusQuoBias": 13,
+        "SunkCostFallacy": 14,
+        "MentalAccounting": 15,
+        "UltimatumGame": 16,
+        "DictatorGame": 17,
+        "TrustInvestmentGame": 18,
+        "PublicGoodsGame": 19,
+        "PrisonersDilemma": 20,
+        "CoordinationGame": 21,
+        "BertrandCompetition": 22,
+        "CournotCompetition": 23,
+        "SSWMarket": 24,
+        "WisdomofCrowd": 25,
+        "CognitiveLimitInvestment": 26,
+        "CognitiveLimitBox": 27,
+        "CognitiveLimitInsurance": 28,
+    }
 
     CATEGORIES = {
             "Instruction": 1,
@@ -281,18 +313,6 @@ class Player(BasePlayer):
         min=0,
         max=100,
         label="Out of 100 basketball players who made 5 shots in a row, how many do you think made the next shot?"
-    )
-
-    # 4. Disposition Effect
-    disposition_A = models.StringField(
-        label="You bought Stock A for $50, and it’s now worth $100. You bought Stock B for $150, and it’s now worth $100. You need money and must sell one. Which stock do you <strong>sell</strong>?",
-        choices=["Stock A", "Stock B"],
-        widget=widgets.RadioSelect
-    )
-    disposition_B = models.StringField(
-        label="You bought Stock A for $50, and it’s now worth $100. You bought Stock B for $150, and it’s now worth $100. You need money and must sell one. Which stock do you <strong>keep</strong>?",
-        choices=["Stock A", "Stock B"],
-        widget=widgets.RadioSelect
     )
 
     # 5. Base Rate Fallacy
@@ -1413,7 +1433,7 @@ class CognitiveLimitInvestmentPage(Base1):
         field_opinion = f"CognitiveLimitInvestmentOpinion_{index+1}"
         group = player.participant.vars["question_groups"]["CognitiveLimitInvestment"]
         save_data(player, group, "experiment_group", i)
-        save_data(player, C.PAGES.index("CognitiveLimitInvestment"), "question", i)
+        save_data(player, C.QUESTION_IDS["CognitiveLimitInvestment"], "question", i)
         save_data(player, getattr(player, field),
                   field, i)
         save_data(player, getattr(player, field_opinion),
@@ -1471,7 +1491,7 @@ class QuestionPage(Base1):
         fields_with_group = [field + "_" + group for field in fields]
         i=player.round_number
         save_data(player, group, "experiment_group", i)
-        save_data(player, C.PAGES.index(page_name), "question", i)
+        save_data(player, C.QUESTION_IDS[page_name], "question", i)
 
         for field in fields_with_group:
             save_data(player, getattr(player, field),
@@ -1502,7 +1522,7 @@ class CognitiveLimitBoxPage(Base1):
         fields = fields + [f"cognitiveLimitBox_{i}" for i in range(2,22)]
         i= player.round_number
         save_data(player, group, "experiment_group", i)
-        save_data(player, C.PAGES.index("CognitiveLimitBox"), "question", i)
+        save_data(player, C.QUESTION_IDS["CognitiveLimitBox"], "question", i)
         for field in fields:
             save_data(player, getattr(player, field),
                   field, i)
@@ -1524,7 +1544,7 @@ class CognitiveLimitInsurancePage(Base1):
         i= player.round_number
         group = player.participant.vars["question_groups"]["CognitiveLimitInsurance"]
         save_data(player, group, "experiment_group", i)
-        save_data(player, C.PAGES.index("CognitiveLimitInsurance"), "question", i)
+        save_data(player, C.QUESTION_IDS["CognitiveLimitInsurance"], "question", i)
         save_data(player, getattr(player, "cognitiveLimitInsurance"),
                 "cognitiveLimitInsurance", i)
     

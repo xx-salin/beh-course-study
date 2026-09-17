@@ -7,7 +7,6 @@ EXPERIMENT_SWITCHES = dict(
     E01_ConjunctionFallacy=True,
     E02_GamblersFallacy=True,
     E03_HotHandFallacy=True,
-    E04_DispositionEffect=True,
     E05_BaseRateFallacy=True,
     E06_IllusionofControl=True,
     E07_AnchoringEffect=True,
