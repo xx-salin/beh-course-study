@@ -46,6 +46,42 @@ class C(BaseConstants):
     
     PAGES = list(PAGES_TO_QUESTIONS.keys()) + ["CognitiveLimitInvestment","CognitiveLimitBox","CognitiveLimitInsurance"]
 
+    ## On/off switch per experiment: session config key -> page name.
+    ## Set the keys to True/False in settings.py (or in the admin "Configure session" form).
+    ## Keys missing from the session config default to on.
+    EXPERIMENT_TOGGLES = {
+        "E01_ConjunctionFallacy": "ConjunctionFallacy",
+        "E02_GamblersFallacy": "GamblersFallacy",
+        "E03_HotHandFallacy": "HotHandFallacy",
+        "E04_DispositionEffect": "DispositionEffect",
+        "E05_BaseRateFallacy": "BaseRateFallacy",
+        "E06_IllusionofControl": "IllusionofControl",
+        "E07_AnchoringEffect": "AnchoringEffect",
+        "E08_HindsightBias": "HindsightBias",
+        "E09_PresentBias": "PresentBias",
+        "E10_LossAversion": "LossAversion",
+        "E11_EndowmentEffect": "EndowmentEffect",
+        "E12_DecoyEffect": "DecoyEffect",
+        "E13_FramingEffect": "FramingEffect",
+        "E14_StatusQuoBias": "StatusQuoBias",
+        "E15_SunkCostFallacy": "SunkCostFallacy",
+        "E16_MentalAccounting": "MentalAccounting",
+        "E17_UltimatumGame": "UltimatumGame",
+        "E18_DictatorGame": "DictatorGame",
+        "E19_TrustInvestmentGame": "TrustInvestmentGame",
+        "E20_PublicGoodsGame": "PublicGoodsGame",
+        "E21_PrisonersDilemma": "PrisonersDilemma",
+        "E22_CoordinationGame": "CoordinationGame",
+        "E23_BertrandCompetition": "BertrandCompetition",
+        "E24_CournotCompetition": "CournotCompetition",
+        "E25_SSWMarket": "SSWMarket",
+        "E26_WisdomofCrowd": "WisdomofCrowd",
+        "E27_30_CountingHeuristic": "CognitiveLimitInvestment",
+        "E31_DeterministicMirror": "CognitiveLimitBox",
+        "E32_InsurancePlan": "CognitiveLimitInsurance",
+    }
+    PAGE_TO_TOGGLE = {page: key for key, page in EXPERIMENT_TOGGLES.items()}
+
     CATEGORIES = {
             "Instruction": 1,
             "Question": len(PAGES_TO_QUESTIONS.keys()),
@@ -1238,9 +1274,9 @@ def creating_session(subsession: Subsession):
 
             save_data(p, json.dumps(p.participant.vars["datarows"] ), 'datarows', i)
 
-            ## Randomize question pages orders
+            ## Randomize question pages orders (only experiments switched on)
             question_pages = list(C.PAGES_TO_QUESTIONS.keys())
-            indices = list(range(len(question_pages)))
+            indices = [i for i, page in enumerate(question_pages) if experiment_enabled(subsession.session, page)]
             random.shuffle(indices)
             shuffled_pages = [question_pages[i] for i in indices]
             p.participant.vars["question_pages"] = shuffled_pages
@@ -1250,6 +1286,24 @@ def creating_session(subsession: Subsession):
 def save_data(player: Player, data, page_name, round_number_to_save):
     desired_round_player = player.in_round(round_number_to_save)
     setattr(desired_round_player, page_name, data)
+
+def experiment_enabled(session, page_name):
+    return bool(session.config.get(C.PAGE_TO_TOGGLE[page_name], True))
+
+def category_rounds(category):
+    start = C.CATEGORY_START_INDEX[category]
+    return list(range(start + 1, start + C.CATEGORIES[category] + 1))
+
+def page_progress(player: Player):
+    ## "Page X of Y" counting only the rounds this participant actually sees
+    rounds = category_rounds("Instruction")
+    rounds += category_rounds("Question")[:len(player.participant.vars["question_pages"])]
+    for category in ["CognitiveLimitInvestment", "CognitiveLimitBox", "CognitiveLimitInsurance"]:
+        if experiment_enabled(player.session, category):
+            rounds += category_rounds(category)
+    rounds += category_rounds("Survey")
+    return {'page_num': rounds.index(player.round_number) + 1,
+            'total_pages': len(rounds)}
 
 
 ## PAGES 
@@ -1300,8 +1354,7 @@ class Instructions_WelcomeScreen(Base1):
 
     @staticmethod
     def vars_for_template(player: Player):
-        return {'page_num': player.round_number,
-                'total_pages': C.NUM_ROUNDS}
+        return page_progress(player)
 
 class LeavePage(Page):
     template_name = 'design_exp/LeavePage.html'
@@ -1313,8 +1366,8 @@ class CognitiveLimitInvestmentPage(Base1):
     @staticmethod
     def is_displayed(player: Player):
         # Show only after instructions round 1
-        return player.round_number >= C.CATEGORY_START_INDEX["CognitiveLimitInvestment"] + 1 and player.round_number < C.CATEGORY_START_INDEX["CognitiveLimitInvestment"] + C.CATEGORIES["CognitiveLimitInvestment"] + 1
-    
+        return player.round_number in category_rounds("CognitiveLimitInvestment") and experiment_enabled(player.session, "CognitiveLimitInvestment")
+
     @staticmethod
     def get_form_fields(player):
         index = player.round_number - C.CATEGORY_START_INDEX["CognitiveLimitInvestment"] - 1
@@ -1325,7 +1378,6 @@ class CognitiveLimitInvestmentPage(Base1):
     @staticmethod
     def vars_for_template(player: Player):
         index = player.round_number - C.CATEGORY_START_INDEX["CognitiveLimitInvestment"] - 1
-        page_num = player.round_number - 1
         group = player.participant.vars["question_groups"]["CognitiveLimitInvestment"]
         datarows = player.participant.vars["datarows"]
         if group == 'A':
@@ -1344,8 +1396,7 @@ class CognitiveLimitInvestmentPage(Base1):
         return {
             'testing': player.session.config["testing"],
             'group': group,
-            'page_num': page_num,
-            'total_pages': C.NUM_ROUNDS,
+            **page_progress(player),
             'array1': retAToShow, # Returns used for display
             'array2': retBToShow, # Returns used for display
             'ar1name': 'AssetA',
@@ -1371,9 +1422,10 @@ class CognitiveLimitInvestmentPage(Base1):
 class QuestionPage(Base1):
     @staticmethod
     def is_displayed(player: Player):
-        # Show only after instructions round 1
-        return player.round_number >= C.CATEGORY_START_INDEX["Question"] + 1 and player.round_number < C.CATEGORY_START_INDEX["Question"] + C.CATEGORIES["Question"] + 1
-    
+        # Show only after instructions round 1; question_pages holds only the experiments switched on
+        index = player.round_number - C.CATEGORY_START_INDEX["Question"] - 1
+        return 0 <= index < len(player.participant.vars["question_pages"])
+
     
     @staticmethod
     def get_form_fields(player):
@@ -1403,8 +1455,7 @@ class QuestionPage(Base1):
         return {
                 'has_image' : has_image,
                 'image' : image,
-                'page_num': player.round_number,
-                'total_pages': C.NUM_ROUNDS,
+                **page_progress(player),
                 'page_name': page_name,
                 'group': group,
             }
@@ -1429,8 +1480,8 @@ class QuestionPage(Base1):
 class CognitiveLimitBoxPage(Base1):
     @staticmethod
     def is_displayed(player: Player):
-        return player.round_number >= C.CATEGORY_START_INDEX["CognitiveLimitBox"] + 1 and player.round_number < C.CATEGORY_START_INDEX["CognitiveLimitBox"] + C.CATEGORIES["CognitiveLimitBox"] + 1
-    
+        return player.round_number in category_rounds("CognitiveLimitBox") and experiment_enabled(player.session, "CognitiveLimitBox")
+
     @staticmethod
     def get_form_fields(player):
         group = player.participant.vars["question_groups"]["CognitiveLimitBox"]
@@ -1439,11 +1490,10 @@ class CognitiveLimitBoxPage(Base1):
         fields = fields + [f"cognitiveLimitBox_{i}" for i in range(2,22)]
         return fields
 
-    
+
     def vars_for_template(player: Player):
-        return {'page_num': player.round_number,
-                'total_pages': C.NUM_ROUNDS}
-    
+        return page_progress(player)
+
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         group = player.participant.vars["question_groups"]["CognitiveLimitBox"]
@@ -1461,21 +1511,20 @@ class CognitiveLimitBoxPage(Base1):
 class CognitiveLimitInsurancePage(Base1):
     @staticmethod
     def is_displayed(player: Player):
-        return player.round_number >= C.CATEGORY_START_INDEX["CognitiveLimitInsurance"] + 1 and player.round_number < C.CATEGORY_START_INDEX["CognitiveLimitInsurance"] + C.CATEGORIES["CognitiveLimitInsurance"] + 1
-    
+        return player.round_number in category_rounds("CognitiveLimitInsurance") and experiment_enabled(player.session, "CognitiveLimitInsurance")
+
     form_fields = ['cognitiveLimitInsurance']
 
     def vars_for_template(player: Player):
         return {'experimentGroup': player.participant.vars["question_groups"]["CognitiveLimitInsurance"],
-                'page_num': player.round_number,
-                'total_pages': C.NUM_ROUNDS}
+                **page_progress(player)}
     
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         i= player.round_number
         group = player.participant.vars["question_groups"]["CognitiveLimitInsurance"]
         save_data(player, group, "experiment_group", i)
-        save_data(player, C.PAGES.index("CognitiveLimitBox"), "question", i)
+        save_data(player, C.PAGES.index("CognitiveLimitInsurance"), "question", i)
         save_data(player, getattr(player, "cognitiveLimitInsurance"),
                 "cognitiveLimitInsurance", i)
     
@@ -1493,10 +1542,7 @@ class SurveyPage(Base1):
 
     @staticmethod
     def vars_for_template(player: Player):
-        return {
-            'page_num': player.round_number,
-            'total_pages': C.NUM_ROUNDS
-        }
+        return page_progress(player)
     
     @staticmethod
     def before_next_page(player: Player, timeout_happened):

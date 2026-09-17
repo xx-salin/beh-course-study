@@ -1,11 +1,47 @@
 from os import environ
 
+# On/off switch per experiment (True = shown, False = skipped).
+# Keys must match C.EXPERIMENT_TOGGLES in design_exp/__init__.py.
+# Also editable per session under "Configure session" in the admin.
+EXPERIMENT_SWITCHES = dict(
+    E01_ConjunctionFallacy=True,
+    E02_GamblersFallacy=True,
+    E03_HotHandFallacy=True,
+    E04_DispositionEffect=True,
+    E05_BaseRateFallacy=True,
+    E06_IllusionofControl=True,
+    E07_AnchoringEffect=True,
+    E08_HindsightBias=True,
+    E09_PresentBias=True,
+    E10_LossAversion=True,
+    E11_EndowmentEffect=True,
+    E12_DecoyEffect=True,
+    E13_FramingEffect=True,
+    E14_StatusQuoBias=True,
+    E15_SunkCostFallacy=True,
+    E16_MentalAccounting=True,
+    E17_UltimatumGame=True,
+    E18_DictatorGame=True,
+    E19_TrustInvestmentGame=True,
+    E20_PublicGoodsGame=True,
+    E21_PrisonersDilemma=True,
+    E22_CoordinationGame=True,
+    E23_BertrandCompetition=True,
+    E24_CournotCompetition=True,
+    E25_SSWMarket=True,
+    E26_WisdomofCrowd=True,
+    E27_30_CountingHeuristic=True,
+    E31_DeterministicMirror=True,
+    E32_InsurancePlan=True,
+)
+
 SESSION_CONFIGS = [
     dict(
         name='design_exp',
          app_sequence=['design_exp'],
          num_demo_participants=2,
-         testing = True
+         testing = True,
+         **EXPERIMENT_SWITCHES,
     ),
 ]
 
