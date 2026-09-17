@@ -365,13 +365,13 @@ class Player(BasePlayer):
 
     # 9. Present Bias / Hyperbolic Discounting
     presentBias_A = models.StringField(
-        label="You can get a $20 gift card right now or a $50 gift card next month. Which would you choose?",
-        choices=["$20 now", "$50 in 1 month"],
+        label="You can get a $20 gift card right now or a $25 gift card next month. Which would you choose?",
+        choices=["$20 now", "$25 in 1 month"],
         widget=widgets.RadioSelect
     )
     presentBias_B = models.StringField(
-        label="You can get a $20 gift card in 12 months, or a $50 gift card in 13 months. Which would you choose?",
-        choices=["$20 in 12 months", "$50 in 13 months"],
+        label="You can get a $20 gift card in 12 months, or a $25 gift card in 13 months. Which would you choose?",
+        choices=["$20 in 12 months", "$25 in 13 months"],
         widget=widgets.RadioSelect
     )
 
