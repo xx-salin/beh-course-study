@@ -670,10 +670,12 @@ class Player(BasePlayer):
         max=220,
         label="How tall do you think <strong>Christoph</strong> is (in centimeters)?"
     )
+    ## B = dialectical bootstrapping: the same three estimates as A, then a second, different
+    ## estimate for each person; the average of the two guesses is stored in wisdom_*_avg_B.
     wisdom_michael_B = models.FloatField(
         min=130,
         max=220,
-        label="Estimate the height of Michael, Daniel, and Christoph. Please provide your best guess. <strong>Suggestion</strong>: You could use Google to quickly research likely heights based on the information (like demographics) you have about each of these persons.<br><br>How tall do you think <strong>Michael</strong> is (in centimeters)?"
+        label="Estimate the height of Michael, Daniel, and Christoph. Please provide your best guess.<br><br>How tall do you think <strong>Michael</strong> is (in centimeters)?"
     )
     wisdom_daniel_B = models.FloatField(
         min=130,
@@ -685,6 +687,25 @@ class Player(BasePlayer):
         max=220,
         label="How tall do you think <strong>Christoph</strong> is (in centimeters)?"
     )
+    wisdom_michael_2_B = models.FloatField(
+        min=130,
+        max=220,
+        label="Assume that your first estimates were wrong. Think about why they could be wrong: which assumptions might have been off, and what other information could you take into account? Based on this, please give a second estimate for each person.<br><br>Second estimate: how tall do you think <strong>Michael</strong> is (in centimeters)?"
+    )
+    wisdom_daniel_2_B = models.FloatField(
+        min=130,
+        max=220,
+        label="Second estimate: how tall do you think <strong>Daniel</strong> is (in centimeters)?"
+    )
+    wisdom_christoph_2_B = models.FloatField(
+        min=130,
+        max=220,
+        label="Second estimate: how tall do you think <strong>Christoph</strong> is (in centimeters)?"
+    )
+    ## Average of the two guesses (dialectical bootstrapping estimate), filled in automatically
+    wisdom_michael_avg_B = models.FloatField()
+    wisdom_daniel_avg_B = models.FloatField()
+    wisdom_christoph_avg_B = models.FloatField()
 
 
 ##### Cognitive Limit Box
@@ -1357,6 +1378,14 @@ def conjunction_field_order(player: Player, group):
     fields = [targets[0]] + list(C.CONJUNCTION_FILLERS.keys()) + [targets[1]]
     return [field + "_" + group for field in fields]
 
+## Wisdom of the crowd: group B gives a second, different estimate for each person
+WISDOM_PERSONS = ['michael', 'daniel', 'christoph']
+
+def wisdom_second_guess_fields(group):
+    if group != "B":
+        return []
+    return [f"wisdom_{person}_2_B" for person in WISDOM_PERSONS]
+
 def experiment_enabled(session, page_name):
     return bool(session.config.get(C.PAGE_TO_TOGGLE[page_name], True))
 
@@ -1510,6 +1539,8 @@ class QuestionPage(Base1):
 
         fields = C.PAGES_TO_QUESTIONS[page_name]
         fields_with_group = [field + "_" + group for field in fields]
+        if page_name == "WisdomofCrowd":
+            fields_with_group += wisdom_second_guess_fields(group)
         return fields_with_group
 
     @staticmethod
@@ -1556,6 +1587,14 @@ class QuestionPage(Base1):
 
         if page_name == "ConjunctionFallacy":
             save_data(player, player.participant.vars["conjunction_order"], "conjunction_order", i)
+
+        if page_name == "WisdomofCrowd" and group == "B":
+            fields_with_group += wisdom_second_guess_fields(group)
+            ## dialectical bootstrapping estimate: average of the first and the second guess
+            for person in WISDOM_PERSONS:
+                average = (getattr(player, f"wisdom_{person}_B") + getattr(player, f"wisdom_{person}_2_B")) / 2
+                setattr(player, f"wisdom_{person}_avg_B", average)
+                save_data(player, average, f"wisdom_{person}_avg_B", i)
 
         for field in fields_with_group:
             save_data(player, getattr(player, field),

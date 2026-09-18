@@ -227,5 +227,97 @@
 {% endif %}
 {{ next_button }}
 
+{% if page_name == "WisdomofCrowd" %}
+{% if group == "B" %}
+    <!-- Dialectical bootstrapping: the second estimates are moved into this pop-up,
+         which opens once the first estimates are given and locked. -->
+    <div id="secondGuessOverlay">
+        <div id="secondGuessDialog">
+            <div id="secondGuessFields"></div>
+            <button type="button" id="secondGuessDone" class="btn btn-primary">Submit my estimates</button>
+        </div>
+    </div>
+    <button type="button" id="secondGuessContinue" class="btn btn-primary">Next</button>
+
+    <style>
+        #secondGuessOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            align-items: center;
+            justify-content: center;
+        }
+        #secondGuessDialog {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            max-width: 640px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var firstNames = ["wisdom_michael_B", "wisdom_daniel_B", "wisdom_christoph_B"];
+            var secondNames = ["wisdom_michael_2_B", "wisdom_daniel_2_B", "wisdom_christoph_2_B"];
+
+            var overlay = document.getElementById("secondGuessOverlay");
+            var holder = document.getElementById("secondGuessFields");
+            var continueBtn = document.getElementById("secondGuessContinue");
+            var doneBtn = document.getElementById("secondGuessDone");
+            var nextBtn = document.querySelector(".otree-btn-next");
+
+            function fieldOf(name) {
+                return document.getElementById("id_" + name);
+            }
+
+            function allAnswered(names) {
+                return names.every(function (name) {
+                    var el = fieldOf(name);
+                    return el && el.value.trim() !== "" && el.checkValidity();
+                });
+            }
+
+            /* move the second estimates out of the page and into the pop-up */
+            secondNames.forEach(function (name) {
+                var el = fieldOf(name);
+                if (el) holder.appendChild(el.closest("._formfield"));
+            });
+
+            /* the real next button submits the page, so it only appears once the pop-up is done */
+            nextBtn.style.display = "none";
+            nextBtn.parentNode.insertBefore(continueBtn, nextBtn);
+
+            continueBtn.addEventListener("click", function () {
+                if (!allAnswered(firstNames)) {
+                    alert("Please give your estimate for all three persons.");
+                    return;
+                }
+                /* keep the first estimates as they are: readonly still submits the values */
+                firstNames.forEach(function (name) {
+                    fieldOf(name).readOnly = true;
+                });
+                overlay.style.display = "flex";
+                var first = fieldOf(secondNames[0]);
+                if (first) first.focus();
+            });
+
+            doneBtn.addEventListener("click", function () {
+                if (!allAnswered(secondNames)) {
+                    alert("Please give a second estimate for all three persons.");
+                    return;
+                }
+                nextBtn.style.display = "";
+                nextBtn.click();
+            });
+        });
+    </script>
+{% endif %}
+{% endif %}
+
 <p>Page {{ page_num }} of {{ total_pages }}</p>
 {{ endblock }}
