@@ -27,7 +27,15 @@
             You are trading with 100 other participants, all of whom are Robinhood retail investors.
         </p>
     {% endif %}
-    
+
+    <p>
+        At each time t, you are asked:
+    </p>
+    <ul>
+        <li>How much would you be willing to pay (WTP) to buy the asset?</li>
+        <li>How much would you be willing to accept (WTA) to sell the asset?</li>
+    </ul>
+
     {% if group == "A" %}
         <p>Please provide your WTP (willingness to pay) and WTA (willingness to accept) for the asset for period t = 0</p>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
