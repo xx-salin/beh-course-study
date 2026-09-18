@@ -6,9 +6,9 @@ from os import environ
 EXPERIMENT_SWITCHES = dict(
     E01_ConjunctionFallacy=False,
     E02_GamblersFallacy=False,
-    E03_HotHandFallacy=True,
+    E03_HotHandFallacy=False,
     E05_BaseRateFallacy=False,
-    E06_IllusionofControl=False,
+    E06_IllusionofControl=True,
     E07_AnchoringEffect=False,
     E08_HindsightBias=False,
     E09_PresentBias=False,

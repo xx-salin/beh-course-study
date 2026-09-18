@@ -345,12 +345,12 @@ class Player(BasePlayer):
     # 6. Illusion of Control
     illusionControl_A = models.StringField(
         label="You're in a lottery where you can pick your own numbers or let the system choose. Which option do you prefer to maximize your chances?",
-        choices=["Pick my own numbers", "Let the system choose", "Either"],
+        choices=["Pick my own numbers", "Let the system choose / I have no preference"],
         widget=widgets.RadioSelect
     )
     illusionControl_B = models.StringField(
         label="100 people bought lottery tickets. 50 of them pick their own numbers, the other 50 let the system choose automatically. The winner is more likely to be in:",
-        choices=["Number picking group", "Random number group", "Either"],
+        choices=["Number picking group", "Random number group / I have no preference"],
         widget=widgets.RadioSelect
     )
 
