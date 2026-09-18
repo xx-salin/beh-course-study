@@ -15,6 +15,9 @@ class C(BaseConstants):
     PAGES_wITH_IMAGES = {
         "EndowmentEffect": "image/ceramic_mug_navy.jpg"
     }
+    ## Quantities shown in the Cournot payoff table (price = 10 - total quantity, profit = own quantity x price)
+    COURNOT_QUANTITIES = list(range(11))
+
     ## Filler statements shown between the two target statements of the conjunction fallacy
     ## (as in Tversky & Kahneman 1983): field name -> statement about Linda
     CONJUNCTION_FILLERS = {
@@ -1522,12 +1525,20 @@ class QuestionPage(Base1):
             has_image = False
             image = ""
         
+        ## Payoff table for the Cournot page: one row per own quantity, one profit per quantity of the other firm
+        cournot_table = [
+            {'own': own, 'profits': [own * (10 - own - other) for other in C.COURNOT_QUANTITIES]}
+            for own in C.COURNOT_QUANTITIES
+        ]
+
         return {
                 'has_image' : has_image,
                 'image' : image,
                 **page_progress(player),
                 'page_name': page_name,
                 'group': group,
+                'cournot_quantities': C.COURNOT_QUANTITIES,
+                'cournot_table': cournot_table,
             }
     
     @staticmethod

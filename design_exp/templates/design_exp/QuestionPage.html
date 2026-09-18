@@ -20,6 +20,33 @@
     </p>
 {% endif %}
 
+{% if page_name == "CournotCompetition" %}
+    <p>
+        The table shows <strong>your profit in €</strong> for each combination of your quantity (rows)
+        and the other firm's quantity (columns).
+    </p>
+    <table class="table table-sm table-bordered text-center" style="font-size: 0.85rem;">
+        <thead>
+            <tr>
+                <th>Your quantity \ Their quantity</th>
+                {% for other in cournot_quantities %}
+                    <th>{{ other }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in cournot_table %}
+                <tr>
+                    <th>{{ row.own }}</th>
+                    {% for profit in row.profits %}
+                        <td>{{ profit }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
 {% if page_name == "SSWMarket" %}
     {% if group == "A" %}
         <p>
