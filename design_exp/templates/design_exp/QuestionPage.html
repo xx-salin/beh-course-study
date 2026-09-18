@@ -9,6 +9,17 @@
     <img src="{% static image %}" alt="Page Image" style="max-width:100%; height:auto;">
 {% endif %}
 
+{% if page_name == "ConjunctionFallacy" %}
+    <p>
+        Linda is 31 years old, single, outspoken, and very bright. She majored in philosophy.
+        As a student, she was deeply concerned with issues of discrimination and social justice,
+        and also participated in gender pay equity demonstrations.
+    </p>
+    <p>
+        For each of the following statements about Linda, please give your estimate.
+    </p>
+{% endif %}
+
 {% if page_name == "SSWMarket" %}
     {% if group == "A" %}
         <p>

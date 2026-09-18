@@ -15,8 +15,18 @@ class C(BaseConstants):
     PAGES_wITH_IMAGES = {
         "EndowmentEffect": "image/ceramic_mug_navy.jpg"
     }
+    ## Filler statements shown between the two target statements of the conjunction fallacy
+    ## (as in Tversky & Kahneman 1983): field name -> statement about Linda
+    CONJUNCTION_FILLERS = {
+        'conjunction_teacher': "Linda is an elementary school teacher.",
+        'conjunction_bookstore': "Linda works in a bookstore and takes Yoga classes.",
+        'conjunction_social_worker': "Linda is a psychiatric social worker.",
+        'conjunction_voters_league': "Linda is a member of the League of Women Voters.",
+        'conjunction_insurance': "Linda is an insurance salesperson.",
+    }
+
     PAGES_TO_QUESTIONS = {
-        "ConjunctionFallacy": ['conjunction_bank_teller', 'conjunction_bank_teller_feminist'],
+        "ConjunctionFallacy": ['conjunction_bank_teller', 'conjunction_bank_teller_feminist'] + list(CONJUNCTION_FILLERS.keys()),
         "GamblersFallacy": ['gambler_heads', 'gambler_tails'],
         "HotHandFallacy": ['hotHand'],
         "BaseRateFallacy": ['baseRate'],
@@ -259,25 +269,29 @@ class Player(BasePlayer):
         label='Student number')
 
     # 1. Conjunction fallacy
+    ## Linda's description is shown on the page; the two target statements are separated by
+    ## the filler statements in C.CONJUNCTION_FILLERS and their order is randomized per participant.
+    conjunction_order = models.StringField()
+
     conjunction_bank_teller_A = models.FloatField(
         min=0,
         max=100,
-        label="Linda is a woman who cares about social problems. What do you think is the probability that Linda is a bank teller (in %, e.g., 10 for 10%)?"
+        label="Linda is a bank teller.<br>What do you think is the probability of this (in %, e.g., 10 for 10%)?"
     )
     conjunction_bank_teller_feminist_A = models.FloatField(
         min=0,
         max=100,
-        label="What do you think is the probability that Linda is a bank teller who is also active in the feminist movement (in %, e.g., 10 for 10%)?"
+        label="Linda is a bank teller who is also active in the feminist movement.<br>What do you think is the probability of this (in %, e.g., 10 for 10%)?"
     )
     conjunction_bank_teller_B = models.FloatField(
         min=0,
         max=1000,
-        label="Linda is a woman who cares about social problems. Out of 1000 Lindas, how many do you think are bank tellers?"
+        label="Linda is a bank teller.<br>Out of 1000 Lindas, how many do you think this is true for?"
     )
     conjunction_bank_teller_feminist_B = models.FloatField(
         min=0,
         max=1000,
-        label="How many do you think are bank tellers who are also active in the feminist movement?"
+        label="Linda is a bank teller who is also active in the feminist movement.<br>Out of 1000 Lindas, how many do you think this is true for?"
     )
 
     # 2. Gambler's Fallacy
@@ -1152,6 +1166,27 @@ class Player(BasePlayer):
         label="One hundred people are guessing the number of jellybeans in a jar. The closest 10 guesses win $100. How likely are you to be one of the winners (in %, eg. 10 for 10%)?",
     )
 
+## Define conjunction fallacy filler questions dynamically
+for field_name, statement in C.CONJUNCTION_FILLERS.items():
+    setattr(
+        Player,
+        f"{field_name}_A",
+        models.FloatField(
+            min=0,
+            max=100,
+            label=f"{statement}<br>What do you think is the probability of this (in %, e.g., 10 for 10%)?"
+        ),
+    )
+    setattr(
+        Player,
+        f"{field_name}_B",
+        models.FloatField(
+            min=0,
+            max=1000,
+            label=f"{statement}<br>Out of 1000 Lindas, how many do you think this is true for?"
+        ),
+    )
+
 ## Define cognitive limit investments fields dynamically    
 for i in range(1, C.CATEGORIES["CognitiveLimitInvestment"] + 1):
     field_name = f'CognitiveLimitInvestment_{i}'
@@ -1301,11 +1336,22 @@ def creating_session(subsession: Subsession):
             shuffled_pages = [question_pages[i] for i in indices]
             p.participant.vars["question_pages"] = shuffled_pages
             p.participant.vars["question_pages_indices"] = indices
+
+            ## Randomize which of the two conjunction fallacy target statements is asked first
+            p.participant.vars["conjunction_order"] = random.choice(["teller_first", "feminist_first"])
             #save_data(p, json.dumps(p.participant.vars["question_pages_indices"] ), 'question_pages_order', i)
 
 def save_data(player: Player, data, page_name, round_number_to_save):
     desired_round_player = player.in_round(round_number_to_save)
     setattr(desired_round_player, page_name, data)
+
+def conjunction_field_order(player: Player, group):
+    ## target statement, the filler statements, then the other target statement
+    targets = ['conjunction_bank_teller', 'conjunction_bank_teller_feminist']
+    if player.participant.vars["conjunction_order"] == "feminist_first":
+        targets.reverse()
+    fields = [targets[0]] + list(C.CONJUNCTION_FILLERS.keys()) + [targets[1]]
+    return [field + "_" + group for field in fields]
 
 def experiment_enabled(session, page_name):
     return bool(session.config.get(C.PAGE_TO_TOGGLE[page_name], True))
@@ -1455,10 +1501,13 @@ class QuestionPage(Base1):
 
         group = player.participant.vars["question_groups"][page_name]
 
+        if page_name == "ConjunctionFallacy":
+            return conjunction_field_order(player, group)
+
         fields = C.PAGES_TO_QUESTIONS[page_name]
         fields_with_group = [field + "_" + group for field in fields]
         return fields_with_group
-    
+
     @staticmethod
     def vars_for_template(player: Player):
         index = player.round_number - C.CATEGORY_START_INDEX["Question"] - 1
@@ -1492,6 +1541,9 @@ class QuestionPage(Base1):
         i=player.round_number
         save_data(player, group, "experiment_group", i)
         save_data(player, C.QUESTION_IDS[page_name], "question", i)
+
+        if page_name == "ConjunctionFallacy":
+            save_data(player, player.participant.vars["conjunction_order"], "conjunction_order", i)
 
         for field in fields_with_group:
             save_data(player, getattr(player, field),
