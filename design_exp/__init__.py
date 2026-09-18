@@ -495,13 +495,13 @@ class Player(BasePlayer):
     trust_send_A = models.FloatField(
         min=0,
         max=10,
-        label="You are Player 1. You have €10. You can send any amount (€0–€10) to another participant, a stranger. Whatever you send will be tripled. The other participant will then choose how much to return to you. How much would you send?"
+        label="You are Player 1. You have €10. You can send any amount (€0–€10) to another participant, a stranger. Whatever you send will be tripled. The stranger will then choose how much to return to you. How much would you send?"
     )
     ## Trust return fields are created dynamically below the Player class
     trust_send_B = models.FloatField(
         min=0,
         max=10,
-        label="You are Player 1. You have €10. You can send any amount (€0–€10) to a family member. Whatever you send will be tripled. The other participant will then choose how much to return to you. How much would you send?"
+        label="You are Player 1. You have €10. You can send any amount (€0–€10) to a family member. Whatever you send will be tripled. Your family member will then choose how much to return to you. How much would you send?"
     )
     
 
