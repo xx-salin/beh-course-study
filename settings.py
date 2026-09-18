@@ -4,8 +4,8 @@ from os import environ
 # Keys must match C.EXPERIMENT_TOGGLES in design_exp/__init__.py.
 # Also editable per session under "Configure session" in the admin.
 EXPERIMENT_SWITCHES = dict(
-    E01_ConjunctionFallacy=True,
-    E02_GamblersFallacy=False,
+    E01_ConjunctionFallacy=False,
+    E02_GamblersFallacy=True,
     E03_HotHandFallacy=False,
     E05_BaseRateFallacy=False,
     E06_IllusionofControl=False,

@@ -27,7 +27,7 @@ class C(BaseConstants):
 
     PAGES_TO_QUESTIONS = {
         "ConjunctionFallacy": ['conjunction_bank_teller', 'conjunction_bank_teller_feminist'] + list(CONJUNCTION_FILLERS.keys()),
-        "GamblersFallacy": ['gambler_heads', 'gambler_tails'],
+        "GamblersFallacy": ['gambler_heads', 'gambler_bet'],
         "HotHandFallacy": ['hotHand'],
         "BaseRateFallacy": ['baseRate'],
         "IllusionofControl": ['illusionControl'],
@@ -300,10 +300,10 @@ class Player(BasePlayer):
         max=100,
         label="A fair coin is flipped 6 times and lands: H, H, H, H, H, H. What is the probability that the next flip will be Heads (in %, e.g., 10 for 10%)?"
     )
-    gambler_tails_A = models.FloatField(
-        min=0,
-        max=100,
-        label="What is the probability that the next flip will be Tails (in %, e.g., 10 for 10%)?"
+    gambler_bet_A = models.StringField(
+        label="You are asked to bet on the outcome of the next flip. Please make your choice:",
+        choices=["Heads", "Tails"],
+        widget=widgets.RadioSelect
     )
 
     gambler_heads_B = models.FloatField(
@@ -311,10 +311,10 @@ class Player(BasePlayer):
         max=100,
         label="A fair coin is flipped 6 times and lands: H, T, H, T, H, T. What is the probability that the next flip will be Heads (in %, e.g., 10 for 10%)? "
     )
-    gambler_tails_B = models.FloatField(
-        min=0,
-        max=100,
-        label="What is the probability that the next flip will be Tails (in %, e.g., 10 for 10%)?"
+    gambler_bet_B = models.StringField(
+        label="You are asked to bet on the outcome of the next flip. Please make your choice:",
+        choices=["Heads", "Tails"],
+        widget=widgets.RadioSelect
     )
 
     # 3. Hot Hand Fallacy
