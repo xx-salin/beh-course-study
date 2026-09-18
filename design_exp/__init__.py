@@ -556,7 +556,7 @@ class Player(BasePlayer):
     coord_other_likelihood_A = models.FloatField(
         min=0,
         max=100,
-        label="How likely do you think it is that the other player chooses the same restaurant as you (in %, eg. 10 forr 10%)?"
+        label="How likely do you think it is that the other player chooses the same restaurant as you (in %, eg. 10 for 10%)?"
     )
     coord_restaurant_choice_B = models.StringField(
         choices=['Täffä', 'Nanapo Sushi'],
@@ -571,7 +571,7 @@ class Player(BasePlayer):
     coord_other_likelihood_B = models.FloatField(
         min=0,
         max=100,
-        label="How likely do you think it is that the other player chooses the same restaurant as you (in %, eg. 10 forr 10%)?"
+        label="How likely do you think it is that the other player chooses the same restaurant as you (in %, eg. 10 for 10%)?"
     )
 
     # Bertrand Competition
