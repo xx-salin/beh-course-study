@@ -466,7 +466,7 @@ class Player(BasePlayer):
     ultimatum_accept_A = models.FloatField(
         min=0,
         max=10,
-        label="You are Player 2. Suppose Player 1 offers you €X.<br>For which values of €X (from €0 to €10) would you accept the offer?"
+        label="You are Player 2. Suppose Player 1 offers you €X.<br>What is the minimum value of €X (from €0 to €10) that you would accept?"
     )
     ultimatum_offer_B = models.FloatField(
         min=0,
@@ -476,7 +476,7 @@ class Player(BasePlayer):
     ultimatum_accept_B = models.FloatField(
         min=0,
         max=10,
-        label="You are Player 2. Suppose Player 1 offers you €X.<br>For which values of €X (from €0 to €10) would you accept the offer?"
+        label="You are Player 2. Suppose Player 1 offers you €X.<br>What is the minimum value of €X (from €0 to €10) that you would accept?"
     )
 
     # Dictator Game
