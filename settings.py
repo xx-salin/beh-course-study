@@ -5,8 +5,8 @@ from os import environ
 # Also editable per session under "Configure session" in the admin.
 EXPERIMENT_SWITCHES = dict(
     E01_ConjunctionFallacy=False,
-    E02_GamblersFallacy=True,
-    E03_HotHandFallacy=False,
+    E02_GamblersFallacy=False,
+    E03_HotHandFallacy=True,
     E05_BaseRateFallacy=False,
     E06_IllusionofControl=False,
     E07_AnchoringEffect=False,

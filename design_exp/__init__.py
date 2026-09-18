@@ -318,15 +318,16 @@ class Player(BasePlayer):
     )
 
     # 3. Hot Hand Fallacy
+    ## A = streak, B = control (no streak); both state the 50% baseline conversion rate
     hotHand_A = models.FloatField(
         min=0,
         max=100,
-        label="A basketball player has made 5 shots in a row. What is the probability that they will make the next shot (in %, e.g., 10 for 10%)?"
+        label="A basketball player is about to shoot. He generally has 50% shot conversion, but is on a streak having made 5 shots in a row.<br>What is the probability he makes this next shot (in %, e.g., 10 for 10%)?"
     )
     hotHand_B = models.FloatField(
         min=0,
         max=100,
-        label="Out of 100 basketball players who made 5 shots in a row, how many do you think made the next shot?"
+        label="A basketball player is about to shoot. He generally has 50% shot conversion.<br>What is the probability he makes this next shot (in %, e.g., 10 for 10%)?"
     )
 
     # 5. Base Rate Fallacy
