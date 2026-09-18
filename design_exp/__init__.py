@@ -452,7 +452,7 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
     mentalAccounting_B = models.StringField(
-        label="You intend to buy a movie ticket for €10. You put aside a €10 bill for the movie in advance but then you lost it. Do you still buy the ticket?",
+        label="You intend to buy a movie ticket for €10. You had a €10 bill in your wallet but then you lost it. Do you still buy the ticket?",
         choices=["Yes", "No"],
         widget=widgets.RadioSelect
     )
