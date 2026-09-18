@@ -15,6 +15,10 @@ class C(BaseConstants):
     PAGES_wITH_IMAGES = {
         "EndowmentEffect": "image/ceramic_mug_navy.jpg"
     }
+    ## Values offered for A's single box in the deterministic mirror question (E31)
+    BOX_A_VALUES = [i * 45 for i in range(21)]
+    BOX_ALWAYS_B = "I would choose B at every value"
+
     ## Quantities shown in the Cournot payoff table (price = 10 - total quantity, profit = own quantity x price)
     COURNOT_QUANTITIES = list(range(11))
 
@@ -138,7 +142,7 @@ class C(BaseConstants):
     
     OTHER_PAGES_TO_QUESTIONS = {
         "CognitiveLimitInvestment": [f"cognitiveLimitInvestment_{i}" for i in range(1, CATEGORIES["CognitiveLimitInvestment"] + 1)] + [f"cognitiveLimitInvestmentOpinion_{i}" for i in range(1,CATEGORIES["CognitiveLimitInvestment"] + 1)],
-        "CognitiveLimitBox": [f"cognitiveLimitBox_{i}" for i in range(1,22)],
+        "CognitiveLimitBox": ["cognitiveLimitBox_switch"],
         "CognitiveLimitInsurance": ["cognitiveLimitInsurance"]
     }
     
@@ -710,32 +714,33 @@ class Player(BasePlayer):
 
 ##### Cognitive Limit Box
 
-    cognitiveLimitBox_1_A = models.StringField(
-        choices=['A', 'B'],
+    ## One question instead of 21 scenarios: the value of A's box at which the participant
+    ## switches from B to A. C.BOX_A_VALUES holds the values offered (same ladder as before).
+    cognitiveLimitBox_switch_A = models.StringField(
+        choices=[f"€{value}" for value in C.BOX_A_VALUES] + [C.BOX_ALWAYS_B],
         widget=widgets.RadioSelect,
         label = (
-                    f"For each of the scenarios, please choose between alternative <strong>A</strong> and <strong>B</strong>.<br>"
-                    f"For your payment, the computer will select one of the 21 scenarios at random.<br>"
-                    f"If you chose <strong>A</strong> in that scenario, you will get whatever is in <strong>A</strong>’s box.<br>"
-                    f"If you chose <strong>B</strong> in that scenario, the computer will randomly choose one of <strong>B</strong>’s boxes and you will get whatever is in that box.<br><br>"
-                    f"<strong>Scenario 1:</strong><br>"
-                    f"<strong>A</strong>. One box containing €0<br>"
-                    f"<strong>B</strong>. 87 boxes: 85 boxes €0, 2 boxes €2175"
+                    f"Please choose between alternative <strong>A</strong> and <strong>B</strong>:<br>"
+                    f"<strong>A</strong>. One box containing €X<br>"
+                    f"<strong>B</strong>. 87 boxes: 85 boxes contain €0, 2 boxes contain €2175<br><br>"
+                    f"If you choose <strong>A</strong>, you will get whatever is in <strong>A</strong>’s box.<br>"
+                    f"If you choose <strong>B</strong>, the computer will randomly choose one of <strong>B</strong>’s boxes "
+                    f"and you will get whatever is in that box.<br><br>"
+                    f"What is the smallest value of €X for which you would choose <strong>A</strong> over <strong>B</strong>?"
                 )
     )
 
-    cognitiveLimitBox_1_B = models.StringField(
-        choices=['A', 'B'],
+    cognitiveLimitBox_switch_B = models.StringField(
+        choices=[f"€{value}" for value in C.BOX_A_VALUES] + [C.BOX_ALWAYS_B],
         widget=widgets.RadioSelect,
         label = (
-                    f"For each of the scenarios, please choose between alternative <strong>A</strong> and <strong>B</strong>.<br>"
-                    f"For your payment, the computer will select one of the 21 scenarios at random.<br>"
-                    f"If you chose <strong>A</strong> in that scenario, you will get whatever is in <strong>A</strong>’s box.<br>"
-                    f"If you chose <strong>B</strong> in that scenario, the computer will calculate the average amount in <strong>B</strong>’s boxes<br>"
-                    f"and you will get paid that amount.<br><br>"
-                    f"<strong>Scenario 1:</strong><br>"
-                    f"<strong>A</strong>. One box containing €0<br>"
-                    f"<strong>B</strong>. 87 boxes: 85 boxes €0, 2 boxes €2175"
+                    f"Please choose between alternative <strong>A</strong> and <strong>B</strong>:<br>"
+                    f"<strong>A</strong>. One box containing €X<br>"
+                    f"<strong>B</strong>. 87 boxes: 85 boxes contain €0, 2 boxes contain €2175<br><br>"
+                    f"If you choose <strong>A</strong>, you will get whatever is in <strong>A</strong>’s box.<br>"
+                    f"If you choose <strong>B</strong>, the computer will calculate the average amount in "
+                    f"<strong>B</strong>’s boxes and you will get paid that amount.<br><br>"
+                    f"What is the smallest value of €X for which you would choose <strong>A</strong> over <strong>B</strong>?"
                 )
     )
 
@@ -1229,20 +1234,6 @@ for i in range(1, C.CATEGORIES["CognitiveLimitInvestment"] + 1):
     )
     setattr(Player, field_opinion_name, field_opinion)
 
-## Define boxes questions dynamically
-for i in range(2, 22):
-    field_name = f'cognitiveLimitBox_{i}'
-    field = models.StringField(
-        choices=['A', 'B'],
-        widget=widgets.RadioSelect,
-        label = (
-                    f"<strong>Scenario {i}:</strong><br>"
-                    f"<strong>A</strong>. One box containing €{(i-1)*45}<br>"
-                    f"<strong>B</strong>. 87 boxes: 85 boxes €0, 2 boxes €2175"
-                )
-    )
-    setattr(Player, field_name, field)
-
 ## Define Investment Trust questions dynamically
 for amount in range(3, 31, 3):
     setattr(
@@ -1340,7 +1331,7 @@ def creating_session(subsession: Subsession):
             for page, questions in C.PAGES_TO_QUESTIONS.items():
                 question_group_assignments[page] = [f"{q}_{player_assignment[page]}" for q in questions]
             question_group_assignments["CognitiveLimitInvestment"] = C.OTHER_PAGES_TO_QUESTIONS["CognitiveLimitInvestment"]
-            question_group_assignments["CognitiveLimitBox"] = [C.OTHER_PAGES_TO_QUESTIONS["CognitiveLimitBox"][0] + "_" +  player_assignment["CognitiveLimitBox"]] + C.OTHER_PAGES_TO_QUESTIONS["CognitiveLimitBox"][1:]
+            question_group_assignments["CognitiveLimitBox"] = [q + "_" + player_assignment["CognitiveLimitBox"] for q in C.OTHER_PAGES_TO_QUESTIONS["CognitiveLimitBox"]]
             question_group_assignments["CognitiveLimitInsurance"] = C.OTHER_PAGES_TO_QUESTIONS["CognitiveLimitInsurance"]
 
             #save_data(p, json.dumps(player_assignment), 'page_groups', i)
@@ -1609,9 +1600,7 @@ class CognitiveLimitBoxPage(Base1):
     def get_form_fields(player):
         group = player.participant.vars["question_groups"]["CognitiveLimitBox"]
 
-        fields = [f'cognitiveLimitBox_1_{group}']
-        fields = fields + [f"cognitiveLimitBox_{i}" for i in range(2,22)]
-        return fields
+        return [f'cognitiveLimitBox_switch_{group}']
 
 
     def vars_for_template(player: Player):
@@ -1621,8 +1610,7 @@ class CognitiveLimitBoxPage(Base1):
     def before_next_page(player: Player, timeout_happened):
         group = player.participant.vars["question_groups"]["CognitiveLimitBox"]
 
-        fields = [f'cognitiveLimitBox_1_{group}']
-        fields = fields + [f"cognitiveLimitBox_{i}" for i in range(2,22)]
+        fields = [f'cognitiveLimitBox_switch_{group}']
         i= player.round_number
         save_data(player, group, "experiment_group", i)
         save_data(player, C.QUESTION_IDS["CognitiveLimitBox"], "question", i)

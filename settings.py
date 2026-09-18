@@ -28,9 +28,9 @@ EXPERIMENT_SWITCHES = dict(
     E23_BertrandCompetition=False,
     E24_CournotCompetition=False,
     E25_SSWMarket=False,
-    E26_WisdomofCrowd=True,
+    E26_WisdomofCrowd=False,
     E27_30_CountingHeuristic=False,
-    E31_DeterministicMirror=False,
+    E31_DeterministicMirror=True,
     E32_InsurancePlan=False,
 )
 
