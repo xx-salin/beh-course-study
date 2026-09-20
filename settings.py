@@ -34,12 +34,18 @@ EXPERIMENT_SWITCHES = dict(
     E32_InsurancePlan=True,
 )
 
+# Order of the experiment pages.
+# True  = random order per participant (default).
+# False = fixed order, exactly as listed in C.PAGES_TO_QUESTIONS
+RANDOMIZE_EXPERIMENT_ORDER = False
+
 SESSION_CONFIGS = [
     dict(
         name='design_exp',
          app_sequence=['design_exp'],
          num_demo_participants=2,
          testing = True,
+         randomize_experiment_order=RANDOMIZE_EXPERIMENT_ORDER,
          **EXPERIMENT_SWITCHES,
     ),
 ]

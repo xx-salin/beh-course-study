@@ -1345,10 +1345,11 @@ def creating_session(subsession: Subsession):
 
             save_data(p, json.dumps(p.participant.vars["datarows"] ), 'datarows', i)
 
-            ## Randomize question pages orders (only experiments switched on)
+            # Question page order (only experiments switched on, when randomize switched on).
             question_pages = list(C.PAGES_TO_QUESTIONS.keys())
             indices = [i for i, page in enumerate(question_pages) if experiment_enabled(subsession.session, page)]
-            random.shuffle(indices)
+            if subsession.session.config.get("randomize_experiment_order", True):
+                random.shuffle(indices)
             shuffled_pages = [question_pages[i] for i in indices]
             p.participant.vars["question_pages"] = shuffled_pages
             p.participant.vars["question_pages_indices"] = indices
