@@ -1417,23 +1417,7 @@ class Instructions_WelcomeScreen(Base1):
         return {
                 'testing': player.session.config["testing"], }
     """
-    
-    @staticmethod
-    def error_message(player: Player, values):
-        if values['isLeaving'] == False:
-            student_number = values.get('student_number')
-            last_name = values.get('last_name')
-            first_name = values.get('first_name')
-            err_string = ""
-            if last_name == "":
-                err_string += 'Please enter your last name.\n'
-                return err_string
-            if first_name == "":
-                err_string += 'Please enter your first name.\n'
-                return err_string
-            if student_number == "":
-                err_string += 'Please enter your student number.\n'
-                return err_string
+
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):

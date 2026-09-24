@@ -37,7 +37,7 @@ EXPERIMENT_SWITCHES = dict(
 # Order of the experiment pages.
 # True  = random order per participant (default).
 # False = fixed order, exactly as listed in C.PAGES_TO_QUESTIONS
-RANDOMIZE_EXPERIMENT_ORDER = True
+RANDOMIZE_EXPERIMENT_ORDER = False
 
 SESSION_CONFIGS = [
     dict(
