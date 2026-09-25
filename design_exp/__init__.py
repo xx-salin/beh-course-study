@@ -433,12 +433,12 @@ class Player(BasePlayer):
 
     # 13. Framing Effect
     framing_A = models.StringField(
-        label="A community is preparing for the outbreak of a disease that is expected to kill 600 people. Choose a program:<br><strong>Program A:</strong> 200 people will be saved<br><strong>Program B:</strong> 1/3 chance that all 600 people will be saved, 2/3 chance that no one will be saved",
+        label="A community is preparing for the outbreak of a disease that is expected to kill 600 people if no action is taken. Choose an action:<br><strong>Program A:</strong> 200 people will be saved<br><strong>Program B:</strong> 1/3 chance that all 600 people will be saved, 2/3 chance that no one will be saved",
         choices=["Program A", "Program B"],
         widget=widgets.RadioSelect
     )
     framing_B = models.StringField(
-        label="A community is preparing for the outbreak of a disease that is expected to kill 600 people. Choose a program:<br><strong>Program A:</strong> 400 people will die<br><strong>Program B:</strong> 1/3 chance that no one will die, 2/3 chance that all 600 people will die",
+        label="A community is preparing for the outbreak of a disease that is expected to kill 600 people if no action is taken. Choose an action:<br><strong>Program A:</strong> 400 people will die<br><strong>Program B:</strong> 1/3 chance that no one will die, 2/3 chance that all 600 people will die",
         choices=["Program A", "Program B"],
         widget=widgets.RadioSelect
     )
