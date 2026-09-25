@@ -308,7 +308,7 @@ class Player(BasePlayer):
         label="A fair coin is flipped 6 times and lands: H, H, H, H, H, H. What is the probability that the next flip will be Heads (in %, e.g., 10 for 10%)?"
     )
     gambler_bet_A = models.StringField(
-        label="You are asked to bet on the outcome of the next flip. Please make your choice:",
+        label="You are asked to bet on the outcome of the next flip. If you get it right, you receive 1€, if not 0€. Please make your choice:",
         choices=["Heads", "Tails"],
         widget=widgets.RadioSelect
     )
@@ -319,7 +319,7 @@ class Player(BasePlayer):
         label="A fair coin is flipped 6 times and lands: H, T, H, T, H, T. What is the probability that the next flip will be Heads (in %, e.g., 10 for 10%)? "
     )
     gambler_bet_B = models.StringField(
-        label="You are asked to bet on the outcome of the next flip. Please make your choice:",
+        label="You are asked to bet on the outcome of the next flip. If you get it right, you receive 1€, if not 0€. Please make your choice:",
         choices=["Heads", "Tails"],
         widget=widgets.RadioSelect
     )
