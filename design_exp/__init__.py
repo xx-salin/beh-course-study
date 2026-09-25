@@ -457,12 +457,12 @@ class Player(BasePlayer):
 
     # 15. Sunk Cost Fallacy
     sunkCost_A = models.StringField(
-        label="You paid €15 to eat at a sushi buffet. After 20 minutes, you're full. Do you:",
+        label="You paid €15 to eat at a sushi buffet. After 20 minutes, you're comfortably full. Do you:",
         choices=["Stay and eat more", "Leave"],
         widget=widgets.RadioSelect
     )
     sunkCost_B = models.StringField(
-        label="You get a free voucher to eat at sushi buffet. After 20 minutes, you're full. Do you:",
+        label="You get a free voucher to eat at sushi buffet. After 20 minutes, you're comfortably full. Do you:",
         choices=["Stay and eat more", "Leave"],
         widget=widgets.RadioSelect
     )
