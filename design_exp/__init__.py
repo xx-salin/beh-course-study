@@ -365,12 +365,12 @@ class Player(BasePlayer):
     anchoring_A = models.FloatField(
         min=0,
         max=500,
-        label="What do you guess is the median height of a 30-year old Swiss spruce tree (in meters, e.g., 100 meters is the median height if the probabilities of such a tree being higher and lower are both 50%)?"
+        label="What do you guess is the median height of a 30-year old Swiss spruce tree (in meters, e.g., 100 meters is the median height if the probabilities of such a tree being taller and shorter are both 50%)?"
     )
     anchoring_B = models.FloatField(
         min=0,
         max=500,
-        label="What do you guess is the median height of a 30-year old Swiss spruce tree (in meters, e.g., 10 meters is the median height if the probabilities of such a tree being higher and lower are both 50%)?"
+        label="What do you guess is the median height of a 30-year old Swiss spruce tree (in meters, e.g., 10 meters is the median height if the probabilities of such a tree being taller and shorter are both 50%)?"
     )
 
     # 8. Hindsight Bias
