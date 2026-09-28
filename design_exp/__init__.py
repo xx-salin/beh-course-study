@@ -568,7 +568,7 @@ class Player(BasePlayer):
     coord_restaurant_choice_A = models.StringField(
         choices=['Täffä', 'Nanapo Sushi'],
         label=(
-            "You and a stranger both choose one of two restaurants to meet at: <strong>Täffä</strong> or <strong>Nanapo Sushi</strong>.<br>"
+            "You and a stranger (Player 2) both choose one of two restaurants to meet at: <strong>Täffä</strong> or <strong>Nanapo Sushi</strong>.<br>"
             "- If you choose the same one, you each get €5.<br>"
             "- If you choose different ones, you each get €0.<br>"
             "Which restaurant do you choose?"
@@ -583,7 +583,7 @@ class Player(BasePlayer):
     coord_restaurant_choice_B = models.StringField(
         choices=['Täffä', 'Nanapo Sushi'],
         label=(
-            "You and a close friend both choose one of two restaurants to meet at: <strong>Täffä</strong> or <strong>Nanapo Sushi</strong>.<br>"
+            "You and a close friend (Player 2) both choose one of two restaurants to meet at: <strong>Täffä</strong> or <strong>Nanapo Sushi</strong>.<br>"
             "- If you choose the same one, you each get €5.<br>"
             "- If you choose different ones, you each get €0.<br>"
             "Which restaurant do you choose?"
