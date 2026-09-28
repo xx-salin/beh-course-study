@@ -483,7 +483,7 @@ class Player(BasePlayer):
     ultimatum_offer_A = models.FloatField(
         min=0,
         max=10,
-        label="You are Player 1. You have €10 to split with another participant (a total stranger). You can offer any amount from €0 to €10. If the other player accepts, the money is split as proposed. If they reject, you both get nothing.<br>What amount would you offer?"
+        label="You are Player 1. You have €10 to split with a total stranger (Player 2). You can offer any amount from €0 to €10. If the other player accepts, the money is split as proposed. If they reject, you both get nothing.<br>What amount would you offer?"
     )
     ultimatum_accept_A = models.FloatField(
         min=0,
@@ -493,7 +493,7 @@ class Player(BasePlayer):
     ultimatum_offer_B = models.FloatField(
         min=0,
         max=10,
-        label="You are Player 1. You have €10 to split with a close friend. You can offer any amount from €0 to €10. If the other player accepts, the money is split as proposed. If they reject, you both get nothing.<br>What amount would you offer?"
+        label="You are Player 1. You have €10 to split with a close friend (Player 2). You can offer any amount from €0 to €10. If the other player accepts, the money is split as proposed. If they reject, you both get nothing.<br>What amount would you offer?"
     )
     ultimatum_accept_B = models.FloatField(
         min=0,
