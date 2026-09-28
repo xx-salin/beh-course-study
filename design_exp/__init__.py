@@ -536,7 +536,7 @@ class Player(BasePlayer):
     public_goods_contrib_B = models.FloatField(
         min=0,
         max=10,
-        label="There are 4 players (including you and your close friends). Everyone starts with €10 and decides how much to put into a shared pot. The total amount in the shared pot is doubled and then evenly divided among the 4 players.<br><br>How much would you contribute (0-10)?"
+        label="There are 4 players (including you) who are close friends. Everyone starts with €10 and decides how much to put into a shared pot. The total amount in the shared pot is doubled and then evenly divided among the 4 players.<br><br>How much would you contribute (0-10)?"
     )
 
     # Prisoner's Dilemma
