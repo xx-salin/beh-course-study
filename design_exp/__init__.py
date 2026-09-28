@@ -613,7 +613,7 @@ class Player(BasePlayer):
         min=0,
         max=10,
         label=(
-            "You and another player (a stranger) are firms deciding how many units to produce (0–10).<br>"
+            "You and a stranger manage competing firms deciding how many units to produce (0–10).<br>"
             "- The market price is <strong>€10 minus the total quantity produced by both firms</strong>.<br>"
             "- Your profit = quantity you produce × market price.<br>"
             "How many units would you produce?"
@@ -624,7 +624,7 @@ class Player(BasePlayer):
         min=0,
         max=10,
         label=(
-            "You and a close friend are firms deciding how many units to produce (0–10).<br>"
+            "You and a close friend manage competing firms deciding how many units to produce (0–10).<br>"
             "- The market price is <strong>€10 minus the total quantity produced by both firms</strong>.<br>"
             "- Your profit = quantity you produce × market price.<br>"
             "How many units would you produce?"
