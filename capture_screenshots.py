@@ -382,14 +382,14 @@ def resolve_page(page, survey_seen):
 
     key, group = experiment_from_fields(names)
 
-    if page_class == "CognitiveLimitInvestmentPage" or page.locator("#updateChartButton").count() > 0:
+    if page_class == "E27to30" or page.locator("#updateChartButton").count() > 0:
         key = "CognitiveLimitInvestment"
         # No _A/_B suffix on these fields: tell the groups apart by the wording.
         body = page.inner_text("body").lower()
         group = "B" if "cumulative returns below" in body else "A"
         return "investment", EXPERIMENT_LABELS[key], group
 
-    if page_class == "CognitiveLimitInsurancePage" or "cognitiveLimitInsurance" in names:
+    if page_class == "E32" or "cognitiveLimitInsurance" in names:
         key = "CognitiveLimitInsurance"
         # No _A/_B suffix either: group B is the stepwise version.
         group = "B" if page.locator("#step-1").count() > 0 else "A"

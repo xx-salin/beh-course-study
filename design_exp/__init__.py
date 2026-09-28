@@ -1337,7 +1337,7 @@ def creating_session(subsession: Subsession):
             #save_data(p, json.dumps(player_assignment), 'page_groups', i)
             #save_data(p, json.dumps(question_group_assignments), 'question_groups', i)
 
-            ## Get corresponding rows in the data for CognitiveLimitInvestmentPage
+            ## Get corresponding rows in the data for the investment page (E27to30)
             nof_rows = C.CATEGORIES["CognitiveLimitInvestment"]
             start_row_idx = (index // nof_groups) * nof_rows
             end_row_idx = start_row_idx + nof_rows
@@ -1396,6 +1396,11 @@ def page_progress(player: Player):
     return {'page_num': rounds.index(player.round_number) + 1,
             'total_pages': len(rounds)}
 
+def experiment_label(page_name):
+    ## Neutral label for the browser tab (e.g. "E5"), so the tab never names the experiment.
+    ## For the question pages the E-number is the question id + 1.
+    return f"E{C.QUESTION_IDS[page_name] + 1}"
+
 
 ## PAGES 
 
@@ -1437,7 +1442,7 @@ class LeavePage(Page):
     def is_displayed(player: Player):
         return player.isLeaving
     
-class CognitiveLimitInvestmentPage(Base1):
+class E27to30(Base1):
     @staticmethod
     def is_displayed(player: Player):
         # Show only after instructions round 1
@@ -1470,6 +1475,7 @@ class CognitiveLimitInvestmentPage(Base1):
             axisLabel = str("Cumulative Return (since start of Year 1)")
         return {
             'testing': player.session.config["testing"],
+            'tab_title': f"E{27 + index}",  # E27-E30, one per round
             'group': group,
             **page_progress(player),
             'array1': retAToShow, # Returns used for display
@@ -1543,6 +1549,7 @@ class QuestionPage(Base1):
                 'image' : image,
                 **page_progress(player),
                 'page_name': page_name,
+                'tab_title': experiment_label(page_name),
                 'group': group,
                 'cournot_quantities': C.COURNOT_QUANTITIES,
                 'cournot_table': cournot_table,
@@ -1576,7 +1583,7 @@ class QuestionPage(Base1):
             save_data(player, getattr(player, field),
                   field, i)
     
-class CognitiveLimitBoxPage(Base1):
+class E31(Base1):
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number in category_rounds("CognitiveLimitBox") and experiment_enabled(player.session, "CognitiveLimitBox")
@@ -1589,7 +1596,8 @@ class CognitiveLimitBoxPage(Base1):
 
 
     def vars_for_template(player: Player):
-        return page_progress(player)
+        return {'tab_title': "E31",
+                **page_progress(player)}
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -1604,7 +1612,7 @@ class CognitiveLimitBoxPage(Base1):
                   field, i)
     
 
-class CognitiveLimitInsurancePage(Base1):
+class E32(Base1):
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number in category_rounds("CognitiveLimitInsurance") and experiment_enabled(player.session, "CognitiveLimitInsurance")
@@ -1613,6 +1621,7 @@ class CognitiveLimitInsurancePage(Base1):
 
     def vars_for_template(player: Player):
         return {'experimentGroup': player.participant.vars["question_groups"]["CognitiveLimitInsurance"],
+                'tab_title': "E32",
                 **page_progress(player)}
     
     @staticmethod
@@ -1660,9 +1669,9 @@ class ThanksPage(Base1):
 page_sequence = [Instructions_WelcomeScreen,
                  LeavePage,
                  QuestionPage,
-                 CognitiveLimitInvestmentPage,
-                 CognitiveLimitBoxPage,
-                 CognitiveLimitInsurancePage,
+                 E27to30,
+                 E31,
+                 E32,
                  SurveyPage,
                  ThanksPage
                  ]
