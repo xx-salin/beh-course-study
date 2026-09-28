@@ -600,12 +600,12 @@ class Player(BasePlayer):
     bertrand_price_A = models.FloatField(
         min=1,
         max=10,
-        label="You and another participant (a stranger) are competing firms. You both sell the same product. You each set a price (between €1 and €10). Whoever sets the lower price sells the product and earns that price as profit. If both choose the same price, you split the market.<br><br>What price do you set (1-10)?"
+        label="You and a stranger manage competing firms. You both sell the same product. You each set a price (between €1 and €10). Whoever sets the lower price sells the product and earns that price as profit. If both choose the same price, you split the market.<br><br>What price do you set (1-10)?"
     )
     bertrand_price_B = models.FloatField(
         min=1,
         max=10,
-        label="You and a close friend are competing firms. You both sell the same product. You each set a price (between €1 and €10). Whoever sets the lower price sells the product and earns that price as profit. If both choose the same price, you split the market.<br><br>What price do you set (1-10)?"
+        label="You and a close friend manage competing firms. You both sell the same product. You each set a price (between €1 and €10). Whoever sets the lower price sells the product and earns that price as profit. If both choose the same price, you split the market.<br><br>What price do you set (1-10)?"
     )
 
     # Cournot Competition
