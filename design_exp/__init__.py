@@ -505,7 +505,7 @@ class Player(BasePlayer):
     dictator_amount_A = models.FloatField(
         min=0,
         max=10,
-        label="You are the only decision-maker. You have €10. You can give any amount (0-10) to another participant, a total stranger. How much would you give?"
+        label="You are the only decision-maker. You have €10. You can give any amount (0-10) to a total stranger. How much would you give?"
     )
     dictator_amount_B = models.FloatField(
         min=0,
