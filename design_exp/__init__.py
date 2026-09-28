@@ -345,8 +345,8 @@ class Player(BasePlayer):
     )
     baseRate_B = models.FloatField(
         min=0,
-        max=1000,
-        label="In a city, 850 out of 1000 cabs are green and 150 are blue. A witness identifies a cab involved in a hit-and-run as blue. The witness correctly identifies a cab’s color 8 times out of 10.<br><br>Out of 1000 incidents with an identified color, how many times would the cab actually be blue when the witness says “blue”?"
+        max=100,
+        label="In a city, 850 out of 1000 cabs are green and 150 are blue. A witness identifies a cab involved in a hit-and-run as blue. The witness correctly identifies a cab’s color 8 times out of 10.<br><br>What is the probability the cab was actually blue (in %, e.g., 10 for 10%)?"
     )
 
     # 6. Illusion of Control
