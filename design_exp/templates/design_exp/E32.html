@@ -14,8 +14,7 @@
 
 <h3>Please review the details of the two insurance plans below and select the one you prefer.</h3>
 {% if experimentGroup == "A" %}
-    <!-- Version A: Show all pages at once -->
-    <h3>Details 1 (of 3)</h3>
+    <!-- Version A: all 12 features in one table -->
     <table>
       <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
       <tbody>
@@ -23,24 +22,10 @@
         <tr><td>Prescription Drugs Coverage</td><td>90% covered</td><td>90% covered</td></tr>
         <tr><td>Monthly Premium</td><td>€121</td><td>€158</td></tr>
         <tr><td>Mobile App</td><td>Yes</td><td>Yes</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Details 2 (of 3)</h3>
-    <table>
-      <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
-      <tbody>
         <tr><td>Annual Deductible</td><td>€1394</td><td>€990</td></tr>
         <tr><td>Dental Care Coverage (max. per year)</td><td>€694</td><td>€716</td></tr>
         <tr><td>Online Account Access</td><td>Yes</td><td>Yes</td></tr>
         <tr><td>Maternity Coverage</td><td>No Coverage</td><td>Included</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Details 3 (of 3)</h3>
-    <table>
-      <thead><tr><th>Feature</th><th>Plan A</th><th>Plan B</th></tr></thead>
-      <tbody>
         <tr><td>Vision Care Coverage (max. per year)</td><td>€191</td><td>€209</td></tr>
         <tr><td>Wellness Programs</td><td>No coverage</td><td>No coverage</td></tr>
         <tr><td>Doctor Visits Covered</td><td>Unlimited</td><td>Unlimited</td></tr>
@@ -52,7 +37,7 @@
     {{ next_button }}
 
   {% else %}
-    <!-- Version B: Stepwise display -->
+    <!-- Version B: Stepwise display, no going back (like E27-E30) -->
     <!-- Step 1 -->
     <div class="step active" id="step-1">
       <h3>Details 1 (of 3)</h3>
@@ -80,7 +65,6 @@
           <tr><td>Maternity Coverage</td><td>No Coverage</td><td>Included</td></tr>
         </tbody>
       </table>
-      <button type="button" onclick="prevStep()">Previous</button>
       <button type="button" onclick="nextStep()">Next</button>
     </div>
 
@@ -96,7 +80,6 @@
           <tr><td>Travel Coverage</td><td>Worldwide</td><td>Worldwide</td></tr>
         </tbody>
       </table>
-      <button type="button" onclick="prevStep()">Previous</button>
       <button type="button" onclick="nextStep()">Next</button>
     </div>
 
@@ -123,13 +106,6 @@
   function nextStep() {
     if (currentStep < totalSteps) {
       currentStep++;
-      showStep(currentStep);
-    }
-  }
-
-  function prevStep() {
-    if (currentStep > 1) {
-      currentStep--;
       showStep(currentStep);
     }
   }

@@ -749,7 +749,7 @@ class Player(BasePlayer):
 
 
     cognitiveLimitInsurance = models.StringField(
-        choices=['plan A', 'plan B'],
+        choices=['Plan A', 'Plan B'],
         widget=widgets.RadioSelect,
         label="Which plan would you choose?"
     )
