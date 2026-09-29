@@ -72,6 +72,7 @@ function createChart() {
         chart: {
             backgroundColor: '#f8f9fa',
             type: 'column',
+            animation: false, // bars just pop up, no sliding in on Next
             width: 400,
             height: 400,
             marginLeft: 110,
@@ -99,7 +100,8 @@ function createChart() {
             type: 'linear',
             labels: {
                 style: {
-                    fontSize: '18px'
+                    fontSize: '18px',
+                    color: '#000000'
                 },
                 enabled:true,
                 formatter: function() {
@@ -107,7 +109,11 @@ function createChart() {
                     return 'Year ' + year;
                 }
             },
-            gridLineWidth: 1,
+            // Axis and labels black and solid; no vertical grid line between Asset A and B
+            gridLineWidth: 0,
+            lineColor: '#000000',
+            lineWidth: 1,
+            tickColor: '#000000',
             pointPlacement: 'on',
             animation: false,
         },
@@ -118,12 +124,14 @@ function createChart() {
                 style: {
                     fontSize: '18px',
                     width: '200px',
-                    whiteSpace: 'wrap'
+                    whiteSpace: 'wrap',
+                    color: '#000000'
                 }
             },
             labels: {
                 style: {
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    color: '#000000'
                 },
                 enabled:true,
                 formatter: function(){
@@ -139,9 +147,14 @@ function createChart() {
                 value: 0,
                 zIndex: 2
             }],
+            // Axis, ticks and labels black and solid; only the horizontal grid lines are gray
             lineWidth: 1,
+            lineColor: '#000000',
             tickWidth: 1,
             tickLength: 5,
+            tickColor: '#000000',
+            gridLineWidth: 1,
+            gridLineColor: '#d9d9d9',
             opposite: false
         },
         plotOptions: {
@@ -155,6 +168,9 @@ function createChart() {
                         marker: {
                             enabled: true
                         }
+                    },
+                    inactive: {
+                        enabled: false // don't gray out the other asset when hovering
                     }
                 },
                 events: {
@@ -227,7 +243,8 @@ function createChart() {
             backgroundColor: '#f8f9fa',
             shadow: false,
             itemStyle: {
-                fontSize: '20px' // Increase the font size of the legend
+                fontSize: '20px', // Increase the font size of the legend
+                color: '#000000'
             }
         },
         exporting: {

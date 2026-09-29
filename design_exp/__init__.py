@@ -1221,14 +1221,14 @@ for field_name, statement in C.CONJUNCTION_FILLERS.items():
 for i in range(1, C.CATEGORIES["CognitiveLimitInvestment"] + 1):
     field_name = f'CognitiveLimitInvestment_{i}'
     field = models.StringField(
-        label="Which asset do you choose to invest in?",
+        label="Which asset do you choose to invest in over the next year?",
         choices=["Asset A", "Asset B"],
         widget=widgets.RadioSelect
     )
     setattr(Player, field_name, field)
     field_opinion_name = f'CognitiveLimitInvestmentOpinion_{i}'
     field_opinion = models.StringField(
-        label="Which asset do you expect to have higher expected return?",
+        label="Which asset do you expect to have a higher return over the next year?",
         choices=["Asset A", "Asset B", "Same Expected Return"],
         widget=widgets.RadioSelect
     )
