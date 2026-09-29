@@ -43,9 +43,6 @@ whole study, screenshotting every page from start to finish.
 
 POP-UPS / IN-PAGE STEPS (all captured)
 --------------------------------------
-E26 Wisdom of crowd, group B : the dialectical-bootstrapping overlay
-      (#secondGuessOverlay) opened by #secondGuessContinue.
-      -> B/<n>_E26_Wisdom_of_crowd.png + B/<n>_E26_Wisdom_of_crowd_popup.png
 E32 Insurance plan, group B  : the 4 in-page steps (.step / nextStep()).
       -> B/<n>_E32_Insurance_plan_step1..step4.png
       (group A shows everything on one page -> A/<n>_E32_Insurance_plan.png)
@@ -54,7 +51,7 @@ E27-30 Counting heuristic    : the chart is revealed year by year by
       -> <n>_E27_30_Counting_heuristic_round<r>_chart.png      (first year)
          <n>_E27_30_Counting_heuristic_round<r>_chart_end.png  (last year)
          <n>_E27_30_Counting_heuristic_round<r>_question.png
-Native JS alert()s (e.g. the wisdom-of-crowd validation) are auto-dismissed.
+Native JS alert()s are auto-dismissed.
 
 The session is created with ``testing = False`` so the "Skip for testing"
 button stays out of the shots, and the devserver's debug panel is hidden
@@ -663,33 +660,6 @@ def capture(page, out_dirs, stem, taken):
 # Page handlers for the pages with pop-ups / in-page steps
 # ---------------------------------------------------------------------------
 
-def handle_wisdom_popup(page, out_dirs, step, label, taken):
-    """E26 group B: fill the first estimates, open the overlay, shoot it, submit."""
-    fill_fields(page)
-    capture(page, out_dirs, file_stem(step, label), taken)
-
-    page.locator("#secondGuessContinue").click()
-    page.wait_for_timeout(400)
-
-    overlay = page.locator("#secondGuessOverlay")
-    if overlay.is_visible():
-        capture(page, out_dirs, file_stem(step, label, "popup"), taken)
-        # The second estimates live inside the overlay now.
-        fill_fields(page, root=overlay)
-        page.wait_for_timeout(150)
-        url_before = page.url
-        try:
-            with page.expect_navigation(wait_until="domcontentloaded", timeout=15000):
-                page.locator("#secondGuessDone").click()
-        except PlaywrightTimeoutError:
-            if page.url == url_before:
-                force_advance_form(page)
-        return page.url != url_before
-
-    # Overlay did not open (e.g. validation): fall back to the normal next button.
-    return click_next_and_wait(page)
-
-
 def handle_insurance_steps(page, out_dirs, step, label, group, taken):
     """E32: group B walks through 4 in-page steps; group A is one page."""
     if group == "A":
@@ -798,12 +768,6 @@ def run_participant(page, participant_url, out_root, max_steps, taken):
 
         if kind == "insurance":
             if not handle_insurance_steps(page, out_dirs, step, label, group, taken):
-                report_stuck(page, label)
-                break
-            continue
-
-        if label == EXPERIMENT_LABELS["WisdomofCrowd"] and group == "B":
-            if not handle_wisdom_popup(page, out_dirs, step, label, taken):
                 report_stuck(page, label)
                 break
             continue
