@@ -283,22 +283,22 @@ class Player(BasePlayer):
     conjunction_bank_teller_A = models.FloatField(
         min=0,
         max=100,
-        label="Linda is a bank teller.<br>What do you think is the probability of this (in %, e.g., 10 for 10%)?"
+        label="Linda is a bank teller.<br>What do you think is the probability this statment is true (in %, e.g., 10 for 10%)?"
     )
     conjunction_bank_teller_feminist_A = models.FloatField(
         min=0,
         max=100,
-        label="Linda is a bank teller who is also active in the feminist movement.<br>What do you think is the probability of this (in %, e.g., 10 for 10%)?"
+        label="Linda is a bank teller who is also active in the feminist movement.<br>What do you think is the probability this statment is true (in %, e.g., 10 for 10%)?"
     )
     conjunction_bank_teller_B = models.FloatField(
         min=0,
         max=1000,
-        label="Linda is a bank teller.<br>Out of 1000 Lindas, how many do you think this is true for?"
+        label="Linda is a bank teller.<br>Out of 1000 Lindas, for how many do you think this is true?"
     )
     conjunction_bank_teller_feminist_B = models.FloatField(
         min=0,
         max=1000,
-        label="Linda is a bank teller who is also active in the feminist movement.<br>Out of 1000 Lindas, how many do you think this is true for?"
+        label="Linda is a bank teller who is also active in the feminist movement.<br>Out of 1000 Lindas, for how many do you think this is true?"
     )
 
     # 2. Gambler's Fallacy
@@ -351,13 +351,13 @@ class Player(BasePlayer):
 
     # 6. Illusion of Control
     illusionControl_A = models.StringField(
-        label="You're in a lottery where you can pick your own numbers or let the system choose. Which option do you prefer to maximize your chances?",
-        choices=["Pick my own numbers", "Let the system choose / I have no preference"],
+        label="You're in a lottery where you can pick your own numbers or let a number generator choose at random. Which option do you prefer to maximize your chances?",
+        choices=["Pick my own numbers", "Random number", "Indifferent"],
         widget=widgets.RadioSelect
     )
     illusionControl_B = models.StringField(
-        label="100 people bought lottery tickets. 50 of them pick their own numbers, the other 50 let the system choose automatically. The winner is more likely to be in:",
-        choices=["Number picking group", "Random number group / I have no preference"],
+        label="100 people bought lottery tickets. 50 of them pick their own numbers, the other 50 let a number generator chooose at random. The winner is more likely to be in:",
+        choices=["Number picking group", "Random number group", "Same likelihood"],
         widget=widgets.RadioSelect
     )
 
@@ -462,7 +462,7 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
     sunkCost_B = models.StringField(
-        label="You get a free voucher to eat at sushi buffet. After 20 minutes, you're comfortably full. Do you:",
+        label="You get a free voucher to eat at a sushi buffet. After 20 minutes, you're comfortably full. Do you:",
         choices=["Stay and eat more", "Leave"],
         widget=widgets.RadioSelect
     )
